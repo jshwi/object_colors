@@ -1,4 +1,4 @@
-Object Color's Docs
+Object Colors Docs
 ===================
 |
 
@@ -14,12 +14,9 @@ The source code is available `here <https://github.com/jshwi/object_colors>`_
    :maxdepth: 1
    :name: mastertoc
 
-   object_colors
-   readme_include
-
+   _assets/object_colors
+   _assets/readme_include
 
 * :ref:`genindex`
-
-|
 
 This documentation was last updated on |today|

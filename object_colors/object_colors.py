@@ -165,9 +165,8 @@ class Color:
         return self.__dict__["white"]
 
     def __get_default(
-            self, colors: Union[
-                Dict[str, list], Dict[str, List[Union[Color, int]]]
-            ]
+            self,
+            colors: Union[Dict[str, list], Dict[str, List[Union[Color, int]]]],
     ) -> Union[Dict[str, list], Dict[str, List[Union[Color, int]]]]:
         # if no white class is present, or no classes are present at
         # all, add to dictionary to keep multicolor method running with
@@ -194,7 +193,7 @@ class Color:
             colors: Union[Dict[str, list], Dict[str, List[Union[Color, int]]]],
             code: int,
             letter: str,
-            full_str: List[str]
+            full_str: List[str],
     ) -> List[str]:
         # match the ansi escape code against randomized number to be
         # used to color string index
@@ -396,7 +395,7 @@ class Color:
     def __update_str_object(
             freeze: int,
             letter: str,
-            obj: Dict[str, Union[int, str, bool, List[str]]]
+            obj: Dict[str, Union[int, str, bool, List[str]]],
     ) -> Dict[str, Union[int, str, bool, List[str]]]:
         # update the object keeping track of various statuses through
         # the color string iteration

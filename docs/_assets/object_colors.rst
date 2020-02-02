@@ -1,7 +1,7 @@
 object-colors
-==============
+=============
 
-.. automodule:: object_colors
+.. autoclass:: object_colors.Color
    :members:
    :undoc-members:
    :show-inheritance:

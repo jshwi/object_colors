@@ -12,4 +12,5 @@ pyproject.toml
 .pytest_cache
 .venv
 venv
+venv.ini
 .vscode/

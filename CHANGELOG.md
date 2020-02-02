@@ -11,8 +11,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - [feat] Adds much more in-depth documentation ([be1932d](https://github.com/jshwi/object_colors/commit/be1932da8c2c9d074c19ea944ddd114dea912a35)).
 - [feat] Make some methods & variables public for more manual configuration ([b9d8669](https://github.com/jshwi/object_colors/commit/b9d8669a030f1e44b7761f04f8ff8f717fb35ef9)).
 - [refactor] Easier to read indentation ([e7d1cb3](https://github.com/jshwi/object_colors/commit/e7d1cb36239f2c62a8881ceb6fccc838fc5caf76)).
-- [test] Implement doctest ([15886ba](https://github.com/jshwi/object_colors/commit/15886ba337a949cb8d6131357a84bcfabc86a5d4)).
+- [test] Implement doctest ([39ed471](https://github.com/jshwi/object_colors/commit/39ed4712bb1b44210307efd2d1e6e3bd2980c493)).
 - [update] README.rst ([1e408d3](https://github.com/jshwi/object_colors/commit/1e408d3d4e139c769b4b4224541e960651c09c3d)).
+- project restructuring and work on sphinx ([0663463](https://github.com/jshwi/object_colors/commit/0663463ede7d96732a86ee6a2eb5c7757dbae493)).
 
 
 ## [v1.0.7](https://github.com/jshwi/object_colors/releases/tag/v1.0.7) ([compare](https://github.com/jshwi/object_colors/compare/v1.0.6...v1.0.7)) - 2020-01-31

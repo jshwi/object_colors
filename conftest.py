@@ -24,108 +24,108 @@ def str_() -> str:
 
 
 @fixture
-def marked(red: str, reset: str) -> str:
-    return f"{red}Cc:{reset} My Business <me@mybusiness.com>;"
+def marked(red: str, color_reset) -> str:
+    return f"{red}Cc:{color_reset} My Business <me@mybusiness.com>;"
 
 
 @fixture
-def marked_color(green: str, red: str, reset: str) -> str:
-    return f"{green}{red}Cc:{green} My Business <me@mybusiness.com>;{reset}"
+def marked_color(green: str, red: str, color_reset) -> str:
+    return f"{green}{red}Cc:{green} My Business <me@mybusiness.com>;{color_reset}"
 
 
 @fixture
-def marked_second(red: str, reset: str) -> str:
-    return f"Cc: {red}My{reset} Business <me@mybusiness.com>;"
+def marked_second(red: str, color_reset) -> str:
+    return f"Cc: {red}My{color_reset} Business <me@mybusiness.com>;"
 
 
 @fixture
-def marked_second_color(green: str, red: str, reset: str) -> str:
-    return f"{green}Cc: {red}My{green} Business <me@mybusiness.com>;{reset}"
+def marked_second_color(green: str, red: str, color_reset) -> str:
+    return f"{green}Cc: {red}My{green} Business <me@mybusiness.com>;{color_reset}"
 
 
 @fixture
-def all_cs(red: str, reset: str) -> str:
+def all_cs(red: str, color_reset) -> str:
     return (
-        f"{red}C{reset}{red}c{reset}{red}:{reset} My "
-        f"Business <me@mybusiness.{red}c{reset}om>;"
+        f"{red}C{color_reset}{red}c{color_reset}{red}:{color_reset} My "
+        f"Business <me@mybusiness.{red}c{color_reset}om>;"
     )
 
 
 @fixture
-def dupe_marked_color(green: str, red: str, reset: str) -> str:
+def dupe_marked_color(green: str, red: str, color_reset) -> str:
     """do dupe fixture but with ignore"""
     return (
         f"{green}This is a string that says {red}one{green} several times. "
         f"It says {red}one{green} in this sentence. And {red}one{green} in "
         f"this sentence. This sentence also has {red}one{green} in it. Lastly "
-        f"this sentence will also say {red}one{green}{reset}"
+        f"this sentence will also say {red}one{green}{color_reset}"
     )
 
 
 @fixture
-def dupe_marked(green: str, red: str, reset: str) -> str:
+def dupe_marked(green: str, red: str, color_reset) -> str:
     """do dupe fixture but with ignore"""
     return (
-        f"This is a string that says {red}one{reset} several times. It says "
-        f"{red}one{reset} in this sentence. And {red}one{reset} in this "
-        f"sentence. This sentence also has {red}one{reset} in it. Lastly this "
-        f"sentence will also say {red}one{reset}"
+        f"This is a string that says {red}one{color_reset} several times. It says "
+        f"{red}one{color_reset} in this sentence. And {red}one{color_reset} in this "
+        f"sentence. This sentence also has {red}one{color_reset} in it. Lastly this "
+        f"sentence will also say {red}one{color_reset}"
     )
 
 
 @fixture
-def all_cs_color(red: str, green: str, reset: str) -> str:
+def all_cs_color(red: str, green: str, color_reset) -> str:
     return (
         f"{green}{red}C{green}{red}c{green}{red}:{green} My "
-        f"Business <me@mybusiness.{red}c{green}om>;{reset}"
+        f"Business <me@mybusiness.{red}c{green}om>;{color_reset}"
     )
 
 
 @fixture
-def all_cs_no_caps(red: str, reset: str) -> str:
+def all_cs_no_caps(red: str, color_reset) -> str:
     return (
-        f"C{red}c{reset}{red}:{reset} My "
-        f"Business <me@mybusiness.{red}c{reset}om>;"
+        f"C{red}c{color_reset}{red}:{color_reset} My "
+        f"Business <me@mybusiness.{red}c{color_reset}om>;"
     )
 
 
 @fixture
-def all_cs_no_caps_color(red: str, green: str, reset: str) -> str:
+def all_cs_no_caps_color(red: str, green: str, color_reset) -> str:
     return (
         f"{green}C{red}c{green}{red}:{green} My "
-        f"Business <me@mybusiness.{red}c{green}om>;{reset}"
+        f"Business <me@mybusiness.{red}c{green}om>;{color_reset}"
     )
 
 
 @fixture
-def all_cs_no_caps_blue(blue: str, reset: str) -> str:
+def all_cs_no_caps_blue(blue: str, color_reset) -> str:
     return (
-        f"C{blue}c{reset}{blue}:{reset} My "
-        f"Business <me@mybusiness.{blue}c{reset}om>;"
+        f"C{blue}c{color_reset}{blue}:{color_reset} My "
+        f"Business <me@mybusiness.{blue}c{color_reset}om>;"
     )
 
 
 @fixture
-def all_cs_no_caps_blue_color(blue: str, green: str, reset: str) -> str:
+def all_cs_no_caps_blue_color(blue: str, green: str, color_reset) -> str:
     return (
         f"{green}C{blue}c{green}{blue}:{green} My "
-        f"Business <me@mybusiness.{blue}c{green}om>;{reset}"
+        f"Business <me@mybusiness.{blue}c{green}om>;{color_reset}"
     )
 
 
 @fixture
-def exact_idx(red: str, reset: str) -> str:
+def exact_idx(red: str, color_reset) -> str:
     return (
-        f"{red}C{reset}{red}c{reset}: My Business "
-        f"<me@mybusiness.{red}c{reset}om>;"
+        f"{red}C{color_reset}{red}c{color_reset}: My Business "
+        f"<me@mybusiness.{red}c{color_reset}om>;"
     )
 
 
 @fixture
-def exact_idx_color(green: str, red: str, reset: str) -> str:
+def exact_idx_color(green: str, red: str, color_reset) -> str:
     return (
         f"{green}{red}C{green}{red}c{green}: My Business "
-        f"<me@mybusiness.{red}c{green}om>;{reset}"
+        f"<me@mybusiness.{red}c{green}om>;{color_reset}"
     )
 
 
@@ -148,60 +148,60 @@ def colored_dupes() -> str:
 
 
 @fixture
-def scatter_cs(green: str, red: str, reset: str) -> str:
+def scatter_cs(green: str, red: str, color_reset) -> str:
     return (
-        f"{red}C{reset}{red}c{reset}{red}:{reset} My Business "
-        f"<me@mybusiness.{red}c{reset}om>;"
+        f"{red}C{color_reset}{red}c{color_reset}{red}:{color_reset} My Business "
+        f"<me@mybusiness.{red}c{color_reset}om>;"
     )
 
 
 @fixture
-def scatter_cs_color(green: str, red: str, reset: str) -> str:
+def scatter_cs_color(green: str, red: str, color_reset) -> str:
     return (
         f"{green}{red}C{green}{red}c{green}{red}:{green} My Business "
-        f"<me@mybusiness.{red}c{green}om>;{reset}"
+        f"<me@mybusiness.{red}c{green}om>;{color_reset}"
     )
 
 
 @fixture
-def scatter_cs_blue(green: str, blue: str, reset: str) -> str:
+def scatter_cs_blue(green: str, blue: str, color_reset) -> str:
     return (
-        f"{blue}C{reset}{blue}c{reset}{blue}:{reset} My Business "
-        f"<me@mybusiness.{blue}c{reset}om>;"
+        f"{blue}C{color_reset}{blue}c{color_reset}{blue}:{color_reset} My Business "
+        f"<me@mybusiness.{blue}c{color_reset}om>;"
     )
 
 
 @fixture
-def scatter_cs_blue_color(green: str, blue: str, reset: str) -> str:
+def scatter_cs_blue_color(green: str, blue: str, color_reset) -> str:
     return (
         f"{green}{blue}C{green}{blue}c{green}{blue}:{green} My Business "
-        f"<me@mybusiness.{blue}c{green}om>;{reset}"
+        f"<me@mybusiness.{blue}c{green}om>;{color_reset}"
     )
 
 
 @fixture
-def scatter_cs_exact(green: str, red: str, reset: str) -> str:
-    return f"C{red}c{reset}: My Business <me@mybusiness.{red}c" f"{reset}om>;"
+def scatter_cs_exact(green: str, red: str, color_reset) -> str:
+    return f"C{red}c{color_reset}: My Business <me@mybusiness.{red}c" f"{color_reset}om>;"
 
 
 @fixture
-def scatter_cs_exact_color(green: str, red: str, reset: str) -> str:
+def scatter_cs_exact_color(green: str, red: str, color_reset) -> str:
     return (
         f"{green}C{red}c{green}: My Business "
-        f"<me@mybusiness.{red}c{green}om>;{reset}"
+        f"<me@mybusiness.{red}c{green}om>;{color_reset}"
     )
 
 
 @fixture
-def spaced_words(green: str, red: str, reset: str) -> str:
-    return f"{red}Cc:{reset} My {red}Business{reset} <me@mybusiness.com>;"
+def spaced_words(green: str, red: str, color_reset) -> str:
+    return f"{red}Cc:{color_reset} My {red}Business{color_reset} <me@mybusiness.com>;"
 
 
 @fixture
-def spaced_words_color(green: str, red: str, reset: str) -> str:
+def spaced_words_color(green: str, red: str, color_reset) -> str:
     return (
         f"{green}{red}Cc:{green} My {red}Business{green} "
-        f"<me@mybusiness.com>;{reset}"
+        f"<me@mybusiness.com>;{color_reset}"
     )
 
 
@@ -221,8 +221,8 @@ def blue() -> str:
 
 
 @fixture
-def reset() -> str:
-    return "\u001b[0;0m"
+def color_reset() -> str:
+    return Color.reset
 
 
 @fixture
