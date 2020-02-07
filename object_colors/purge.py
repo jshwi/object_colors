@@ -1,7 +1,3 @@
-# import configparser
-# import os
-# import shutil
-# import subprocess
 import sys
 from configparser import ConfigParser
 from os import path, rename, listdir
@@ -120,7 +116,8 @@ class Purge(setuptools.Command):
         with open("venv.ini", "w") as file:
             config.write(file)
 
-    def __write_ini(self):
+    def __get_ini(self):
+        choice = None
         color = self.__color_class()
         venv = self.__detect_venv()
         if venv:
@@ -129,17 +126,33 @@ class Purge(setuptools.Command):
                 f"{venv} appears to be your current virtual environment.",
                 venv
             )
-            choice = input("Is this correct? [Y/n]").lower()
+            choice = input(
+                color.yellow.get_key(
+                    "Is this correct?\n\nY/n] ",
+                    "Y/n]",
+                    scatter=True
+                )
+            ).lower()
             if choice == "n":
                 venv = None
         if not venv:
+            if choice == "n":
+                color.red.bold.print("No Virtual Environment Detected")
             venv = input(
-                "Please enter the name of your virtual environment."
+                color.yellow.get_key(
+                    "Please enter the name of your virtual environment."
+                    "\n\n>>>", ">>>", scatter=True
+
+                )
             )
         self.__write_config(venv)
+        return venv
 
     def run(self) -> None:
-        exclude = self.__parse_config()
+        if path.isfile("venv.ini"):
+            exclude = self.__parse_config()
+        else:
+            exclude = self.__get_ini()
         up_dir = path.join("..", exclude)
         self.__resolve_opt(exclude, up_dir)
         self.__parse_config()

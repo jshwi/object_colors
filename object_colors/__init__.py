@@ -8,3 +8,5 @@ __copyright__ = "2019, Stephen Whitlock"
 __license__ = "MIT"
 __release__ = __version__
 from .object_colors import Color
+# noinspection PyUnresolvedReferences
+from .purge import Purge

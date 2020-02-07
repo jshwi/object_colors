@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import setuptools
+from object_colors import Purge
 
 
 def readme():
