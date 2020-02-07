@@ -6,6 +6,7 @@ dev_requirements.txt
 *.egg*
 favicon_io.zip
 .idea
+*.patch
 .pre-commit-config.yaml
 __pycache__
 pyproject.toml
