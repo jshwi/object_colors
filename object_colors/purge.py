@@ -136,12 +136,12 @@ class Purge(setuptools.Command):
             if choice == "n":
                 venv = None
         if not venv:
-            if choice == "n":
+            if None in (choice, venv):
                 color.red.bold.print("No Virtual Environment Detected")
             venv = input(
                 color.yellow.get_key(
                     "Please enter the name of your virtual environment."
-                    "\n\n>>>", ">>>", scatter=True
+                    "\n\n>>> ", ">>>", scatter=True
 
                 )
             )
