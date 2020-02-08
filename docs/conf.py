@@ -1,5 +1,6 @@
 import os
 import sys
+from recommonmark.parser import CommonMarkParser
 
 sys.path.insert(0, os.path.abspath('..'))
 import object_colors  # noqa
@@ -25,23 +26,28 @@ extensions = [
     'sphinxcontrib.programoutput'
 ]
 
-source_suffix = ['.rst']
+source_suffix = {
+    '.md': CommonMarkParser,
+    '.rst': 'restructuredtext'
+}
 master_doc = 'index'
 exclude_patterns = ['_build']
 templates_path = ['_templates']
 todo_include_todos = True
-
 pygments_style = 'monokai'
 autoclass_content = "both"
 autodoc_member_order = 'bysource'
 autodoc_default_options = {"members": None}
-imgmath_latex_preamble = r'''
-\usepackage{xcolor}
-\definecolor{offwhite}{rgb}{238,238,238}
-\everymath{\color{offwhite}}
-\everydisplay{\color{offwhite}}
-'''
+logo = "_static/logo.png"
+add_function_parentheses = True
+add_module_names = True
 
+
+# # -- Options for HTML output -----------------------------------------
+html_domain_indices = True
+html_use_index = True
+html_show_sourcelink = True
+html_show_sphinx = False
 html_theme = 'graphite'
 html_theme_path = ['_themes']
 html_static_path = ['_static']
@@ -49,16 +55,7 @@ html_logo = '_static/oc.png'
 html_favicon = "_static/oc.ico"
 html_sidebars = {'**': ['globaltoc.html', 'searchbox.html']}
 
-# # -- Options for HTML output -------------------------------------------
-html_domain_indices = True
-html_use_index = True
-html_show_sourcelink = True
-logo = "_static/logo.png"
-add_function_parentheses = True
-add_module_names = True
-html_show_sphinx = False
-
-# -- Options for Epub output --------------------------------------------------
+# # -- Options for Epub output -----------------------------------------
 epub_title = project
 epub_author = author
 epub_publisher = author
@@ -71,7 +68,7 @@ epub_exclude_files = ["_static/favicon_io.zip", "_static/oc.ico"]
 epub_tocdepth = 2
 epub_tocdup = False
 
-# # -- Options for LaTeX output ------------------------------------------
+# # -- Options for LaTeX output ----------------------------------------
 latex_elements = {
     "papersize": "",
     "fontpkg": "",
@@ -93,8 +90,14 @@ latex_show_pagerefs = False
 latex_domain_indices = False
 latex_use_modindex = False
 latex_logo = None
+imgmath_latex_preamble = r'''
+\usepackage{xcolor}
+\definecolor{offwhite}{rgb}{238,238,238}
+\everymath{\color{offwhite}}
+\everydisplay{\color{offwhite}}
+'''
 
-# -- Options for Mobi output -------------------------------------------
+# # -- Options for Mobi output -----------------------------------------
 mobi_theme = "graphite"
 mobi_title = project
 mobi_author = author
@@ -108,6 +111,6 @@ mobi_tocdepth = 2
 mobi_tocdup = False
 mobi_add_visible_links = False
 
-# -- Options for Code Examples output ----------------------------------
+# # -- Options for Code Examples output --------------------------------
 code_example_dir = "code-example"
 code_add_python_path = ["../py"]

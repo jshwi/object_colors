@@ -16,6 +16,7 @@ The source code is available `here <https://github.com/jshwi/object_colors>`_
 
    _assets/object_colors
    _assets/readme_include
+   _assets/include_changelog
 
 * :ref:`genindex`
 
