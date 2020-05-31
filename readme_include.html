@@ -1,0 +1,287 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>README &#8212; Object Colors 1.0.8 documentation</title>
+    <link rel="stylesheet" href="_static/graphite.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="object-colors" href="object_colors.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="object_colors.html" title="object-colors"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Object Colors 1.0.8 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="readme">
+<h1>README<a class="headerlink" href="#readme" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference external" href="https://pypi.org/project/object-colors/">Pypi</a> |
+<a class="reference external" href="https://object-colors.readthedocs.io/en/latest/">Read the Docs</a> |
+<a class="reference external" href="https://jshwi.github.io/object_colors/index.html">Github Pages</a></p>
+<a class="reference external image-reference" href="https://travis-ci.org/jshwi/object_colors"><img alt="Build Status" src="https://travis-ci.org/jshwi/object_colors.svg?branch=master" /></a>
+<a class="reference external image-reference" href="https://codecov.io/github/jshwi/object_colors?branch=master"><img alt="codecov.io" src="https://codecov.io/github/jshwi/object_colors/coverage.svg?branch=master" /></a>
+<a class="reference external image-reference" href="https://badge.fury.io/py/object-colors"><img alt="PyPi Version" src="https://badge.fury.io/py/object-colors.svg" /></a>
+<a class="reference external image-reference" href="https://opensource.org/licenses/MIT"><img alt="Licence" src="https://img.shields.io/badge/License-MIT-yellow.svg" /></a>
+<p>Installation</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">pip install object-colors</span>
+</pre></div>
+</div>
+<p>Setup</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">object_colors</span> <span class="kn">import</span> <span class="n">Color</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">color</span> <span class="o">=</span> <span class="n">Color</span><span class="p">()</span>
+</pre></div>
+</div>
+<blockquote>
+<div><p>Without keywords args are positional like so:</p>
+</div></blockquote>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Color</span><span class="p">(</span><span class="s2">&quot;text&quot;</span><span class="p">,</span> <span class="s2">&quot;effect&quot;</span><span class="p">,</span> <span class="s2">&quot;background&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<blockquote>
+<div><ul class="simple">
+<li><p>colors:</p>
+<ul>
+<li><p>black:        0</p></li>
+<li><p>red:          1</p></li>
+<li><p>green:        2</p></li>
+<li><p>yellow:       3</p></li>
+<li><p>blue:         4</p></li>
+<li><p>purple:       5</p></li>
+<li><p>cyan:         6</p></li>
+<li><p>white:        7</p></li>
+</ul>
+</li>
+<li><p>effects:</p>
+<ul>
+<li><p>None:         0</p></li>
+<li><p>bold:         1</p></li>
+<li><p>bright:       2</p></li>
+<li><p>underline:    3</p></li>
+<li><p>negative:     4</p></li>
+</ul>
+</li>
+</ul>
+</div></blockquote>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">color</span> <span class="o">=</span> <span class="n">Color</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">color</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<blockquote>
+<div><ul class="simple">
+<li><p>text:       green</p></li>
+<li><p>effect:     bold</p></li>
+<li><p>background: red</p></li>
+</ul>
+</div></blockquote>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">color</span> <span class="o">=</span> <span class="n">Color</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># instance attributes</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">color</span><span class="o">.</span><span class="n">set</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">text</span><span class="o">=</span><span class="s2">&quot;green&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">effect</span><span class="o">=</span><span class="s2">&quot;bold&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">background</span><span class="o">=</span><span class="s2">&quot;red&quot;</span>
+<span class="gp">... </span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># subclasses -  set like those for</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># original class only keyword arguments</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># are expressed as dictionary</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">color</span><span class="o">.</span><span class="n">set</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">sub_color</span><span class="o">=</span><span class="p">{</span>
+<span class="gp">... </span>        <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;green&quot;</span><span class="p">,</span>
+<span class="gp">... </span>        <span class="s2">&quot;effect&quot;</span><span class="p">:</span> <span class="s2">&quot;bold&quot;</span><span class="p">,</span>
+<span class="gp">... </span>        <span class="s2">&quot;background&quot;</span><span class="p">:</span> <span class="s2">&quot;red&quot;</span>
+<span class="gp">... </span>    <span class="p">}</span>
+<span class="gp">... </span><span class="p">)</span>
+</pre></div>
+</div>
+<blockquote>
+<div><p>For most versatile usage simply instantiate the class with the populate_colors() method
+This will populate the instance with a subclass for every key in the “colors” object</p>
+</div></blockquote>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">color</span> <span class="o">=</span> <span class="n">Color</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">color</span><span class="o">.</span><span class="n">populate_colors</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">color</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">)</span>
+<span class="go">&#39;text&#39;: 7,</span>
+<span class="go">&#39;effect&#39;: 0,</span>
+<span class="go">&#39;background&#39;: 0,</span>
+<span class="go">&#39;black&#39;: &lt;object_colors.Color object at 0x7f3302cf4b10&gt;,</span>
+<span class="go">&#39;red&#39;: &lt;object_colors.Color object at 0x7f3303aa5d10&gt;,</span>
+<span class="go">&#39;green&#39;: &lt;object_colors.Color object at 0x7f33037a7710&gt;,</span>
+<span class="go">&#39;yellow&#39;: &lt;object_colors.Color object at 0x7f3302bd4710&gt;,</span>
+<span class="go">&#39;blue&#39;: &lt;object_colors.Color object at 0x7f3302bd4d50&gt;,</span>
+<span class="go">&#39;purple&#39;: &lt;object_colors.Color object at 0x7f3302ce0910&gt;,</span>
+<span class="go">&#39;cyan&#39;: &lt;object_colors.Color object at 0x7f33037ddc10&gt;,</span>
+<span class="go">&#39;white&#39;: &lt;object_colors.Color object at 0x7f33005e4c10&gt;,</span>
+<span class="go">&#39;bold&#39;: &lt;object_colors.Color object at 0x7f3303b09a90&gt;</span>
+</pre></div>
+</div>
+<blockquote>
+<div><p>This can be further enhanced with the Color.bold object, initialized when bold has not been activated</p>
+</div></blockquote>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">color</span><span class="o">.</span><span class="n">red</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="s2">&quot;not bold&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">color</span><span class="o">.</span><span class="n">red</span><span class="o">.</span><span class="n">bold</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="s2">&quot;bold&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<blockquote>
+<div><p>All colors, effects and objects can be manipulated however the user pleases, provided a keyword is not used outside its purpose</p>
+</div></blockquote>
+<p>Methods</p>
+<ul class="simple">
+<li><p>set():</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Set values with keyword arguments</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">color</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="n">effect</span><span class="o">=</span><span class="s2">&quot;bold&quot;</span><span class="p">,</span> <span class="n">background</span><span class="o">=</span><span class="s2">&quot;blue&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">color</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="s2">&quot;bold&quot;</span><span class="p">,</span> <span class="s2">&quot;blue&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">color</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="mi">114</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">)</span>
+<span class="go">{&#39;text&#39;: 1, &#39;effect&#39;: 1, &#39;background&#39;: 4}</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Set a new class with a keyword (any key) followed by a dict</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># value</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">color</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">red</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;red&quot;</span><span class="p">},</span> <span class="n">yellow</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;yellow&quot;</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">)</span>
+<span class="go">&#39;text&#39;: 1,</span>
+<span class="go">&#39;effect&#39;: 0,</span>
+<span class="go">&#39;background&#39;: 4,</span>
+<span class="go">&#39;red&#39;: &lt;object_colors.Color object at 0x0000020C10D06080&gt;,</span>
+<span class="go">&#39;yellow&#39;: &lt;object_colors.Color object at 0x0000020C10D06B00&gt;</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">color</span><span class="o">.</span><span class="n">yellow</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">)</span>
+<span class="go">{&#39;text&#39;: 3, &#39;effect&#39;: 1, &#39;background&#39;: 0}</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>get():</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># store values</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># useful for multicolored printing</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bullet</span> <span class="o">=</span> <span class="n">color</span><span class="o">.</span><span class="n">red</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;[!] &quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">warning</span> <span class="o">=</span> <span class="n">color</span><span class="o">.</span><span class="n">yellow</span><span class="p">(</span><span class="s2">&quot;Warning&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">bullet</span> <span class="o">+</span> <span class="n">warning</span><span class="p">)</span>
+<span class="go">&quot;\u001b[0;31;40m[!]\u001b[0;0m\u001b[0;33;40mWarning\u001b[0;0m&quot;</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># returns a string or a tuple</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span> <span class="n">color</span><span class="o">.</span><span class="n">red</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="s2">&quot;c&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>print():</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Instance includes enhanced print() function for color output</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">color</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="s2">&quot;no color print&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">color</span><span class="o">.</span><span class="n">red</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="s2">&quot;red print&quot;</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">color</span><span class="o">.</span><span class="n">yellow</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="s2">&quot;yellow print&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>pop():</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># remove unused attributes</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">color</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;bold_red&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">color</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">)</span>
+<span class="go">&#39;text&#39;: 1,</span>
+<span class="go">&#39;effect&#39;: 1,</span>
+<span class="go">&#39;background&#39;: 4,</span>
+<span class="go">&#39;red&#39;: &lt;object_colors.Color object at 0x0000020C10D06080&gt;,</span>
+<span class="go">&#39;yellow&#39;: &lt;object_colors.Color object at 0x0000020C10D06B00&gt;</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># or create new instances</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">red</span> <span class="o">=</span> <span class="n">color</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;red&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">color</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">)</span>
+<span class="go">&#39;text&#39;: 1,</span>
+<span class="go">&#39;effect&#39;: 1,</span>
+<span class="go">&#39;background&#39;: 4,</span>
+<span class="go">&#39;yellow&#39;: &lt;object_colors.Color object at 0x0000020C10D06B00&gt;</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">red</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">)</span>
+<span class="go">{&#39;text&#39;: 1, &#39;effect&#39;: 0, &#39;background&#39;: 0}</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">red</span><span class="o">.</span><span class="n">print</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">red</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">red</span><span class="o">.</span><span class="n">set</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/oc.png" alt="Logo"/>
+            </a></p>
+<h3><a href="index.html">Table of Contents</a></h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="object_colors.html">object-colors</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">README</a></li>
+</ul>
+
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="object_colors.html" title="object-colors"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Object Colors 1.0.8 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Stephen Whitlock.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.4.
+    </div>
+  </body>
+</html>

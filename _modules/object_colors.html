@@ -1,0 +1,1018 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>object_colors &#8212; Object Colors 1.0.8 documentation</title>
+    <link rel="stylesheet" href="../_static/graphite.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Object Colors 1.0.8 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for object_colors</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python3</span>
+<span class="sd">&quot;&quot;&quot;object-colors</span>
+<span class="sd">The Python Color Dictionary</span>
+
+<span class="sd">A simple to use class module designed to stylise output with minimal</span>
+<span class="sd">setup and instantiation</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">from</span> <span class="nn">random</span> <span class="kn">import</span> <span class="n">randint</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span>
+
+
+<div class="viewcode-block" id="Color"><a class="viewcode-back" href="../object_colors.html#object_colors.Color">[docs]</a><span class="k">class</span> <span class="nc">Color</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Instantiate object with attributes to use...</span>
+
+<span class="sd">    &gt;&gt;&gt; from object_colors import Color</span>
+
+<span class="sd">    &gt;&gt;&gt; str_ = &quot;Sample string&quot;</span>
+
+<span class="sd">    &gt;&gt;&gt; color = Color(text=&quot;green&quot;)</span>
+
+<span class="sd">    &gt;&gt;&gt; color_str = color.get(str_)</span>
+<span class="sd">    &gt;&gt;&gt; print(color_str)</span>
+<span class="sd">    \u001b[0;32;40mSample string\u001b[0;0m</span>
+
+<span class="sd">    ...or set attributes after instantiation</span>
+
+<span class="sd">    &gt;&gt;&gt; color.set(subclass={&quot;text&quot;: &quot;red&quot;})</span>
+
+<span class="sd">    &gt;&gt;&gt; substr = color.subclass.get_key(str_, &quot;Sample&quot;)</span>
+<span class="sd">    &gt;&gt;&gt; print(substr)</span>
+<span class="sd">    \u001b[0;31;40mSample\u001b[0;0m string</span>
+
+<span class="sd">    &gt;&gt;&gt; green_substr = color.subclass.get_key(color_str, &quot;Sample&quot;)</span>
+<span class="sd">    &gt;&gt;&gt; print(green_substr)  # doctest +ELLIPSIS</span>
+<span class="sd">    \u001b[0;32;40m\u001b[0;31;40mSample\u001b[0;32;40m string\u001b[...</span>
+
+
+<span class="sd">    Pop objects from `color.__dict__`</span>
+
+<span class="sd">    &gt;&gt;&gt; subclass = color.pop(&quot;subclass&quot;)</span>
+
+<span class="sd">    &gt;&gt;&gt; substr = subclass.get_key(str_, &quot;Sample&quot;)</span>
+<span class="sd">    &gt;&gt;&gt; print(substr)</span>
+<span class="sd">    \u001b[0;31;40mSample\u001b[0;0m string</span>
+
+<span class="sd">    Print colored strings directly</span>
+
+<span class="sd">    &gt;&gt;&gt; color.print(str_)</span>
+<span class="sd">    \u001b[0;32;40mSample string\u001b[0;0m</span>
+
+<span class="sd">    &gt;&gt;&gt; color.print_key(str_, &quot;string&quot;)</span>
+<span class="sd">    Sample \u001b[0;32;40mstring\u001b[0;0m</span>
+
+<span class="sd">    Set attributes in instance with flexible arguments</span>
+
+<span class="sd">    &gt;&gt;&gt; # keywords</span>
+<span class="sd">    &gt;&gt;&gt; color.set(text=&quot;blue&quot;, effect=&quot;bold&quot;, background=&quot;red&quot;)</span>
+<span class="sd">    &gt;&gt;&gt; print(color.__dict__)  # doctest +ELLIPSIS</span>
+<span class="sd">    {&#39;text&#39;: 4, &#39;effect&#39;: 1, &#39;background&#39;: 1, &#39;bold&#39;: &lt;object_colors...}</span>
+
+<span class="sd">    &gt;&gt;&gt; # args (string)</span>
+<span class="sd">    &gt;&gt;&gt; color.set(&quot;blue&quot;, &quot;bold&quot;, &quot;red&quot;)</span>
+<span class="sd">    &gt;&gt;&gt; print(color.__dict__)  # doctest +ELLIPSIS</span>
+<span class="sd">    {&#39;text&#39;: 4, &#39;effect&#39;: 1, &#39;background&#39;: 1, &#39;bold&#39;: &lt;object_colors...}</span>
+
+<span class="sd">    &gt;&gt;&gt; # args (tuple)</span>
+<span class="sd">    &gt;&gt;&gt; color.set(4, 1, 1)</span>
+<span class="sd">    &gt;&gt;&gt; print(color.__dict__)  # doctest +ELLIPSIS</span>
+<span class="sd">    {&#39;text&#39;: 4, &#39;effect&#39;: 1, &#39;background&#39;: 1, &#39;bold&#39;: &lt;object_colors...}</span>
+
+<span class="sd">    &gt;&gt;&gt; # args (integer)</span>
+<span class="sd">    &gt;&gt;&gt; color.set(411)</span>
+<span class="sd">    &gt;&gt;&gt; print(color.__dict__)  # doctest +ELLIPSIS</span>
+<span class="sd">    {&#39;text&#39;: 4, &#39;effect&#39;: 1, &#39;background&#39;: 1, &#39;bold&#39;: &lt;object_colors...}</span>
+
+<span class="sd">    Set attributes in object instance&#39;s subclasses</span>
+
+<span class="sd">    &gt;&gt;&gt; color.set(red={&quot;text&quot;: &quot;red&quot;, &quot;effect&quot;: &quot;bold&quot;})</span>
+<span class="sd">    &gt;&gt;&gt; color.red.print(&quot;Red string&quot;)</span>
+<span class="sd">    \u001b[1;31;40mRed string\u001b[0;0m</span>
+
+<span class="sd">    &gt;&gt;&gt; color.set(blue={&quot;text&quot;: &quot;blue&quot;, &quot;effect&quot;: &quot;bold&quot;})</span>
+<span class="sd">    &gt;&gt;&gt; color.blue.print(&quot;Blue string&quot;)</span>
+<span class="sd">    \u001b[1;34;40mBlue string\u001b[0;0m</span>
+
+<span class="sd">    Populate instance with subclasses for all colors</span>
+
+<span class="sd">    &gt;&gt;&gt; color.populate_colors()</span>
+
+<span class="sd">    &gt;&gt;&gt; color.green.print(&quot;Green string&quot;)</span>
+<span class="sd">    \u001b[0;32;40mGreen string\u001b[0;0m</span>
+
+<span class="sd">    &gt;&gt;&gt; color.cyan.print(&quot;Cyan string&quot;)</span>
+<span class="sd">    \u001b[0;36;40mCyan string\u001b[0;0m</span>
+<span class="sd">    &gt;&gt;&gt; # etc...</span>
+
+<span class="sd">    Easily switch between bold text</span>
+
+<span class="sd">    &gt;&gt;&gt; color.purple.bold.print(&quot;Bold purple string&quot;)</span>
+<span class="sd">    \u001b[1;35;40mBold purple string\u001b[0;0m</span>
+
+<span class="sd">    :cvar code:         Ansi escape code</span>
+<span class="sd">    :type code:         str</span>
+<span class="sd">    :cvar reset:        Default reset code to switch off color for str</span>
+<span class="sd">    :type reset:        str</span>
+<span class="sd">    :cvar ansi_escape:  Regex for finding ansi escape codes in strings</span>
+<span class="sd">    :type ansi_escape:  Pattern[str]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">__keys</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">,</span> <span class="s2">&quot;effect&quot;</span><span class="p">,</span> <span class="s2">&quot;background&quot;</span><span class="p">]</span>
+    <span class="n">__opts</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;colors&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="s2">&quot;black&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;red&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;green&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;yellow&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;blue&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;purple&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;cyan&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;white&quot;</span><span class="p">,</span>
+        <span class="p">],</span>
+        <span class="s2">&quot;effect&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;none&quot;</span><span class="p">,</span> <span class="s2">&quot;bold&quot;</span><span class="p">,</span> <span class="s2">&quot;bright&quot;</span><span class="p">,</span> <span class="s2">&quot;underline&quot;</span><span class="p">,</span> <span class="s2">&quot;negative&quot;</span><span class="p">],</span>
+    <span class="p">}</span>
+
+    <span class="n">code</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\u001b</span><span class="s2">&quot;</span>
+    <span class="n">reset</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">code</span><span class="si">}</span><span class="s2">[0;0m&quot;</span>
+    <span class="n">ansi_escape</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;(\x1B(?:[@-Z</span><span class="se">\\</span><span class="s2">-_]|\[[0-?]*[ -/]*[@-~]))&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="mi">7</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">effect</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">background</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__getattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="c1"># look up dynamic subclasses</span>
+        <span class="k">return</span> <span class="n">item</span>
+
+    <span class="k">def</span> <span class="fm">__dir__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="c1"># primarily here so linters know that the subclass calling</span>
+        <span class="c1"># methods are not strings strings attempting to call attributes</span>
+        <span class="k">return</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">item</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">]</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">__collect_values</span><span class="p">(</span>
+            <span class="n">value</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Color</span><span class="p">],</span>
+            <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+            <span class="n">colors</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Color</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]],</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Color</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]]:</span>
+        <span class="c1"># determine that value is a subclass before adding it to the</span>
+        <span class="c1"># object to avoid TypeErrors</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">and</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;bold&quot;</span><span class="p">,</span> <span class="s2">&quot;black&quot;</span><span class="p">):</span>
+            <span class="n">colors</span><span class="p">[</span><span class="s2">&quot;classes&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+            <span class="n">colors</span><span class="p">[</span><span class="s2">&quot;code&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">value</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">colors</span>
+
+    <span class="k">def</span> <span class="nf">__dummy_subclass</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Color</span><span class="p">:</span>
+        <span class="c1"># populate class with white subclass</span>
+        <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;white&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="mi">7</span><span class="p">}}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__make_subclass</span><span class="p">((),</span> <span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">[</span><span class="s2">&quot;white&quot;</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">__get_default</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">colors</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span>
+                <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">],</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Color</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]]</span>
+            <span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">],</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Color</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]]]:</span>
+        <span class="c1"># if no white class is present, or no classes are present at</span>
+        <span class="c1"># all, add to dictionary to keep multicolor method running with</span>
+        <span class="c1"># some variance for lower numbers of classes</span>
+        <span class="k">if</span> <span class="s2">&quot;white&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">colors</span><span class="p">[</span><span class="s2">&quot;classes&quot;</span><span class="p">]:</span>
+            <span class="n">white</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__dummy_subclass</span><span class="p">()</span>
+            <span class="n">colors</span><span class="p">[</span><span class="s2">&quot;classes&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">white</span><span class="p">)</span>
+            <span class="n">colors</span><span class="p">[</span><span class="s2">&quot;code&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">white</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">colors</span>
+
+    <span class="k">def</span> <span class="nf">__get_multi_object</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">]]:</span>
+        <span class="c1"># get an object consisting of available color codes to be</span>
+        <span class="c1"># randomized and available subclasses to match against</span>
+        <span class="c1"># randomized codes</span>
+        <span class="n">colors</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;code&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;classes&quot;</span><span class="p">:</span> <span class="p">[]}</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">colors</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__collect_values</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">colors</span><span class="p">)</span>
+        <span class="n">colors</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__get_default</span><span class="p">(</span><span class="n">colors</span><span class="p">)</span>
+        <span class="n">colors</span><span class="p">[</span><span class="s2">&quot;code&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">dict</span><span class="o">.</span><span class="n">fromkeys</span><span class="p">(</span><span class="n">colors</span><span class="p">[</span><span class="s2">&quot;code&quot;</span><span class="p">]))</span>
+        <span class="k">return</span> <span class="n">colors</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">__validate_code</span><span class="p">(</span>
+            <span class="n">colors</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">],</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Color</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]]],</span>
+            <span class="n">code</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+            <span class="n">letter</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+            <span class="n">full_str</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="c1"># match the ansi escape code against randomized number to be</span>
+        <span class="c1"># used to color string index</span>
+        <span class="k">for</span> <span class="n">class_</span> <span class="ow">in</span> <span class="n">colors</span><span class="p">[</span><span class="s2">&quot;classes&quot;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">class_</span><span class="o">.</span><span class="n">text</span> <span class="o">==</span> <span class="n">code</span><span class="p">:</span>
+                <span class="n">idx</span> <span class="o">=</span> <span class="n">class_</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">letter</span><span class="p">)</span>
+                <span class="n">full_str</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span>
+                <span class="k">break</span>
+        <span class="k">return</span> <span class="n">full_str</span>
+
+    <span class="k">def</span> <span class="nf">__get_multi_str</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">str_</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">colors</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">]]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="c1"># compile and return the string colored by a randomized</span>
+        <span class="c1"># assortment of colors present with the available subclasses</span>
+        <span class="n">full_str</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">colors</span><span class="p">[</span><span class="s2">&quot;classes&quot;</span><span class="p">])</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">str_</span>
+        <span class="n">max_</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">colors</span><span class="p">[</span><span class="s2">&quot;code&quot;</span><span class="p">])</span> <span class="o">-</span> <span class="mi">1</span>
+        <span class="k">for</span> <span class="n">count</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">str_</span><span class="p">):</span>
+            <span class="n">letter</span> <span class="o">=</span> <span class="n">str_</span><span class="p">[</span><span class="n">count</span><span class="p">]</span>
+            <span class="n">idx</span> <span class="o">=</span> <span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">max_</span><span class="p">)</span>
+            <span class="n">code</span> <span class="o">=</span> <span class="n">colors</span><span class="p">[</span><span class="s2">&quot;code&quot;</span><span class="p">][</span><span class="n">idx</span><span class="p">]</span>
+            <span class="n">full_str</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__validate_code</span><span class="p">(</span><span class="n">colors</span><span class="p">,</span> <span class="n">code</span><span class="p">,</span> <span class="n">letter</span><span class="p">,</span> <span class="n">full_str</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">full_str</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__get_colored_tuple</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">args</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]],</span> <span class="n">reset</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]:</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+        <span class="c1"># replace tuples containing strings with corresponding colored</span>
+        <span class="c1"># strings</span>
+        <span class="k">for</span> <span class="n">count</span><span class="p">,</span> <span class="n">arg</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
+            <span class="n">args</span><span class="p">[</span><span class="n">count</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__get_colored_str</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="n">reset</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__color_settings</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="c1"># get the colored string with ansi-escape code settings added</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">Color</span><span class="o">.</span><span class="n">code</span><span class="si">}</span><span class="s2">[</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">effect</span><span class="si">}</span><span class="s2">;3</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">text</span><span class="si">}</span><span class="s2">;4</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">background</span><span class="si">}</span><span class="s2">m&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__get_colored_str</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">str_</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">reset</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="c1"># set desired reset code and return colored string</span>
+        <span class="n">reset</span> <span class="o">=</span> <span class="n">reset</span> <span class="k">if</span> <span class="n">reset</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">setting</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__color_settings</span><span class="p">()</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">setting</span><span class="si">}{</span><span class="n">str_</span><span class="si">}{</span><span class="n">reset</span><span class="si">}</span><span class="s2">&quot;</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">__extract_codes</span><span class="p">(</span>
+            <span class="n">word</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">helper</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]:</span>
+        <span class="c1"># ints represent the ansi code index within the string</span>
+        <span class="c1"># This function looks to retrieve an ansi code - rather than</span>
+        <span class="c1"># create one - to be used again later in the `helper` subclass</span>
+        <span class="n">codes</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s2">&quot;effect&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;background&quot;</span><span class="p">:</span> <span class="mi">8</span><span class="p">}</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">codes</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">helper</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">key</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">word</span><span class="p">[</span><span class="n">value</span><span class="p">])})</span>
+        <span class="k">return</span> <span class="n">helper</span>
+
+    <span class="k">def</span> <span class="nf">__populate_state_object</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="n">word</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+            <span class="n">name_</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+            <span class="n">state</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]],</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]]:</span>
+        <span class="c1"># separate ansi codes from string and return a dict of both to</span>
+        <span class="c1"># be used individually later</span>
+        <span class="k">if</span> <span class="n">Color</span><span class="o">.</span><span class="n">ansi_escape</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">word</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">word</span> <span class="o">!=</span> <span class="n">Color</span><span class="o">.</span><span class="n">reset</span><span class="p">:</span>
+                <span class="n">codes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__extract_codes</span><span class="p">(</span><span class="n">word</span><span class="p">,</span> <span class="p">{})</span>
+                <span class="n">state</span><span class="p">[</span><span class="n">name_</span><span class="p">]</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">codes</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">state</span><span class="p">[</span><span class="s2">&quot;str_&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">word</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">state</span>
+
+    <span class="k">def</span> <span class="nf">__get_state_object</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">words</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">name_</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]]:</span>
+        <span class="c1"># iterate string split up by ansi escape codes to populate</span>
+        <span class="c1"># object to organise them</span>
+        <span class="n">state</span> <span class="o">=</span> <span class="p">{</span><span class="n">name_</span><span class="p">:</span> <span class="p">{},</span> <span class="s2">&quot;str_&quot;</span><span class="p">:</span> <span class="p">[]}</span>
+        <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">words</span><span class="p">:</span>
+            <span class="n">state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__populate_state_object</span><span class="p">(</span><span class="n">word</span><span class="p">,</span> <span class="n">name_</span><span class="p">,</span> <span class="n">state</span><span class="p">)</span>
+        <span class="n">state</span><span class="p">[</span><span class="s2">&quot;str_&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">state</span><span class="p">[</span><span class="s2">&quot;str_&quot;</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">state</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">__get_opts</span><span class="p">(</span><span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="c1"># get list of values to represent ansi escape codes whether</span>
+        <span class="c1"># colors are needed or effects are needed</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">Color</span><span class="o">.</span><span class="n">__opts</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">Color</span><span class="o">.</span><span class="n">__opts</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">Color</span><span class="o">.</span><span class="n">__opts</span><span class="p">[</span><span class="s2">&quot;colors&quot;</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">__resolve_ansi_code</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">keys</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">str_</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">switches</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bool</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="c1"># separate ansi escape codes from ansi coded string</span>
+        <span class="c1"># create the `helper` subclass and return the bare string</span>
+        <span class="c1"># reset code will return strings after the colored keys as their</span>
+        <span class="c1"># original ansi code color</span>
+        <span class="c1"># color the keywords entered as *args</span>
+        <span class="c1"># surround the string with its original color</span>
+        <span class="c1"># remove the helper function and return colored string</span>
+        <span class="n">str_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">set_str</span><span class="p">(</span><span class="n">str_</span><span class="p">)</span>
+        <span class="n">reset</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">helper</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">reset</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+        <span class="n">str_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__process_str</span><span class="p">(</span><span class="n">keys</span><span class="p">,</span> <span class="n">str_</span><span class="p">,</span> <span class="n">reset</span><span class="p">,</span> <span class="n">switches</span><span class="p">)</span>
+        <span class="n">str_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">helper</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">str_</span><span class="p">)</span>
+        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">[</span><span class="s2">&quot;helper&quot;</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">str_</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">__get_swapped_index</span><span class="p">(</span>
+            <span class="n">switches</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bool</span><span class="p">],</span> <span class="n">letter</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">idx</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="c1"># add additional swapped case of string index for scatter mode</span>
+        <span class="c1"># to catch all instances of occurring substring when ignore case</span>
+        <span class="c1"># is also active</span>
+        <span class="k">if</span> <span class="n">switches</span><span class="p">[</span><span class="s2">&quot;case&quot;</span><span class="p">]</span> <span class="ow">and</span> <span class="n">letter</span><span class="o">.</span><span class="n">isalnum</span><span class="p">():</span>
+            <span class="n">idx</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">letter</span><span class="o">.</span><span class="n">swapcase</span><span class="p">())</span>
+        <span class="k">return</span> <span class="n">idx</span>
+
+    <span class="k">def</span> <span class="nf">__get_str_indices</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">switches</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bool</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="c1"># separate all characters into individual indices to be</span>
+        <span class="c1"># individually run against main string for substrings</span>
+        <span class="n">idx</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">letter</span> <span class="ow">in</span> <span class="n">key</span><span class="p">:</span>
+            <span class="n">idx</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">letter</span><span class="p">)</span>
+            <span class="n">idx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__get_swapped_index</span><span class="p">(</span><span class="n">switches</span><span class="p">,</span> <span class="n">letter</span><span class="p">,</span> <span class="n">idx</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">dict</span><span class="o">.</span><span class="n">fromkeys</span><span class="p">(</span><span class="n">idx</span><span class="p">))</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">__normalize_strs</span><span class="p">(</span>
+            <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">str_</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">switches</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bool</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+        <span class="c1"># ignore case of the searched string by searching lowercase</span>
+        <span class="c1"># substring in lowercase string</span>
+        <span class="n">strs</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;str_&quot;</span><span class="p">:</span> <span class="n">str_</span><span class="p">,</span> <span class="s2">&quot;key&quot;</span><span class="p">:</span> <span class="n">key</span><span class="p">}</span>
+        <span class="k">if</span> <span class="n">switches</span><span class="p">[</span><span class="s2">&quot;case&quot;</span><span class="p">]:</span>
+            <span class="n">strs</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;str_&quot;</span><span class="p">:</span> <span class="n">str_</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span> <span class="s2">&quot;key&quot;</span><span class="p">:</span> <span class="n">key</span><span class="o">.</span><span class="n">lower</span><span class="p">()})</span>
+        <span class="k">return</span> <span class="n">strs</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">__get_multiple_positions</span><span class="p">(</span>
+            <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">str_</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">pos</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+        <span class="c1"># generator will be needed if there are multiple positions of a</span>
+        <span class="c1"># single substring</span>
+        <span class="n">places</span> <span class="o">=</span> <span class="p">[</span><span class="n">p</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">str_</span><span class="p">))</span> <span class="k">if</span> <span class="n">str_</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span> <span class="o">==</span> <span class="n">p</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">place</span> <span class="ow">in</span> <span class="n">places</span><span class="p">:</span>
+            <span class="n">pos</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">place</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">pos</span>
+
+    <span class="k">def</span> <span class="nf">__find_key_positions</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">strs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span> <span class="n">pos</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+        <span class="c1"># find the position of keywords(s) and return list of results</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="n">strs</span><span class="p">[</span><span class="s2">&quot;key&quot;</span><span class="p">]</span>
+        <span class="n">str_</span> <span class="o">=</span> <span class="n">strs</span><span class="p">[</span><span class="s2">&quot;str_&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="sa">f</span><span class="s2">&quot; </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2"> &quot;</span> <span class="ow">in</span> <span class="sa">f</span><span class="s2">&quot; </span><span class="si">{</span><span class="n">str_</span><span class="si">}</span><span class="s2"> &quot;</span><span class="p">:</span>
+            <span class="n">pos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__get_multiple_positions</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">str_</span><span class="p">,</span> <span class="n">pos</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">pos</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">__iterate_theirs</span><span class="p">(</span>
+            <span class="n">letter</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">ours</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">pos</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">count</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+        <span class="c1"># iterate through either a full string or just once against a</span>
+        <span class="c1"># single index and check whether the search is successful</span>
+        <span class="c1"># if it is then append the count (index) of the main string to</span>
+        <span class="c1"># the list of index positions</span>
+        <span class="k">for</span> <span class="n">theirs</span> <span class="ow">in</span> <span class="n">letter</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">ours</span> <span class="o">==</span> <span class="n">theirs</span><span class="p">:</span>
+                <span class="n">pos</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">count</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">pos</span>
+
+    <span class="k">def</span> <span class="nf">__iterate_ours</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">str_</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">pos</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">count</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+        <span class="c1"># get letter of string according to enumeration in main loop</span>
+        <span class="c1"># and iterate string we want to search with string we are</span>
+        <span class="c1"># searching against</span>
+        <span class="n">letter</span> <span class="o">=</span> <span class="n">str_</span><span class="p">[</span><span class="n">count</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">ours</span> <span class="ow">in</span> <span class="n">idx</span><span class="p">:</span>
+            <span class="n">pos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__iterate_theirs</span><span class="p">(</span><span class="n">letter</span><span class="p">,</span> <span class="n">ours</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">count</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">pos</span>
+
+    <span class="k">def</span> <span class="nf">__get_scattered_positions</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">str_</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">idx</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">pos</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+        <span class="c1"># get the scattered position of searched keys within string</span>
+        <span class="k">for</span> <span class="n">count</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">str_</span><span class="p">):</span>
+            <span class="n">pos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__iterate_ours</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="n">str_</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">count</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">pos</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">__update_str_object</span><span class="p">(</span>
+            <span class="n">freeze</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+            <span class="n">letter</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+            <span class="n">obj</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]]:</span>
+        <span class="c1"># update the object keeping track of various statuses through</span>
+        <span class="c1"># the color string iteration</span>
+        <span class="n">obj</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;freeze&quot;</span><span class="p">:</span> <span class="n">freeze</span><span class="p">,</span> <span class="s2">&quot;letter&quot;</span><span class="p">:</span> <span class="n">letter</span><span class="p">,</span> <span class="s2">&quot;applied&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">})</span>
+        <span class="n">obj</span><span class="p">[</span><span class="s2">&quot;pos&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">obj</span>
+
+    <span class="k">def</span> <span class="nf">__get_key_positions</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="n">str_</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+            <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+            <span class="n">pos</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
+            <span class="n">switches</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bool</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+        <span class="c1"># get position(s) of searched term as an integer within string</span>
+        <span class="n">strs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__normalize_strs</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">str_</span><span class="p">,</span> <span class="n">switches</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__find_key_positions</span><span class="p">(</span><span class="n">strs</span><span class="p">,</span> <span class="n">pos</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__normalize_position</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+            <span class="n">str_</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+            <span class="n">pos</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
+            <span class="n">switches</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bool</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+        <span class="c1"># return list of search positions for scattered keys if</span>
+        <span class="c1"># `scatter` is True or return colored full words if False</span>
+        <span class="k">if</span> <span class="n">switches</span><span class="p">[</span><span class="s2">&quot;any&quot;</span><span class="p">]:</span>
+            <span class="n">idx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__get_str_indices</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">switches</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__get_scattered_positions</span><span class="p">(</span><span class="n">str_</span><span class="p">,</span> <span class="n">idx</span><span class="p">,</span> <span class="n">pos</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__get_key_positions</span><span class="p">(</span><span class="n">str_</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">switches</span><span class="p">)</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">__str_object</span><span class="p">(</span><span class="n">pos</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">bool</span><span class="p">]]:</span>
+        <span class="c1"># dictionary of values to resolve index of substrings to color</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s2">&quot;freeze&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="s2">&quot;applied&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+            <span class="s2">&quot;letter&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;pos&quot;</span><span class="p">:</span> <span class="n">pos</span><span class="p">,</span>
+            <span class="s2">&quot;added&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="p">}</span>
+
+    <span class="k">def</span> <span class="nf">__process_index</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="n">obj</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]],</span>
+            <span class="n">str_</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+            <span class="n">count</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]]:</span>
+        <span class="c1"># use the list of key positions within string to color the keys</span>
+        <span class="n">freeze</span> <span class="o">=</span> <span class="n">count</span> <span class="o">-</span> <span class="mi">1</span>  <span class="c1"># minus 1 for whitespace</span>
+        <span class="n">obj</span><span class="p">[</span><span class="s2">&quot;letter&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">str_</span><span class="p">[</span><span class="n">count</span><span class="p">]</span>
+        <span class="n">letter</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">obj</span><span class="p">[</span><span class="s2">&quot;letter&quot;</span><span class="p">],</span> <span class="n">reset</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">obj</span><span class="p">[</span><span class="s2">&quot;pos&quot;</span><span class="p">]</span> <span class="ow">and</span> <span class="n">count</span> <span class="o">==</span> <span class="n">obj</span><span class="p">[</span><span class="s2">&quot;pos&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]:</span>
+            <span class="n">obj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__update_str_object</span><span class="p">(</span><span class="n">freeze</span><span class="p">,</span> <span class="n">letter</span><span class="p">,</span> <span class="n">obj</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">obj</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">__reset_index</span><span class="p">(</span>
+            <span class="n">obj</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">bool</span><span class="p">]],</span>
+            <span class="n">reset</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+            <span class="n">len_key</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+            <span class="n">count</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">bool</span><span class="p">]]:</span>
+        <span class="c1"># index of string has reached position of search key</span>
+        <span class="c1"># add the length of the search key to the frozen count</span>
+        <span class="c1"># needs to pass over an entire word if the search was a word</span>
+        <span class="c1"># otherwise this will just skip over a single index as per</span>
+        <span class="c1"># usual</span>
+        <span class="n">obj</span><span class="p">[</span><span class="s2">&quot;added&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">len_key</span> <span class="o">+</span> <span class="n">obj</span><span class="p">[</span><span class="s2">&quot;freeze&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">count</span> <span class="o">==</span> <span class="n">obj</span><span class="p">[</span><span class="s2">&quot;added&quot;</span><span class="p">]</span> <span class="ow">or</span> <span class="n">len_key</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="ow">and</span> <span class="n">obj</span><span class="p">[</span><span class="s2">&quot;applied&quot;</span><span class="p">]:</span>
+            <span class="n">obj</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;letter&quot;</span><span class="p">:</span> <span class="n">obj</span><span class="p">[</span><span class="s2">&quot;letter&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">reset</span><span class="p">,</span> <span class="s2">&quot;applied&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">})</span>
+        <span class="k">return</span> <span class="n">obj</span>
+
+    <span class="k">def</span> <span class="nf">__process_keys</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">str_</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">pos</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">reset</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">len_key</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="c1"># color the searched keys bases on their index within the string</span>
+        <span class="n">compile_</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">obj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__str_object</span><span class="p">(</span><span class="n">pos</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">count</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">str_</span><span class="p">):</span>
+            <span class="n">obj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__process_index</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">str_</span><span class="p">,</span> <span class="n">count</span><span class="p">)</span>
+            <span class="n">obj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__reset_index</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">reset</span><span class="p">,</span> <span class="n">len_key</span><span class="p">,</span> <span class="n">count</span><span class="p">)</span>
+            <span class="n">letter</span> <span class="o">=</span> <span class="n">obj</span><span class="p">[</span><span class="s2">&quot;letter&quot;</span><span class="p">]</span>
+            <span class="n">compile_</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">letter</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">compile_</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__process_str</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="n">keys</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+            <span class="n">str_</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+            <span class="n">reset</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+            <span class="n">switches</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bool</span><span class="p">],</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="c1"># process arguments provided to color the string accordingly</span>
+        <span class="n">pos</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">:</span>
+            <span class="n">pos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__normalize_position</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">str_</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">switches</span><span class="p">)</span>
+            <span class="n">len_key</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">key</span><span class="p">)</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">switches</span><span class="p">[</span><span class="s2">&quot;any&quot;</span><span class="p">]</span> <span class="k">else</span> <span class="mi">1</span>
+            <span class="n">str_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__process_keys</span><span class="p">(</span><span class="n">str_</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">reset</span><span class="p">,</span> <span class="n">len_key</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">str_</span>
+
+    <span class="k">def</span> <span class="nf">__populate_defaults</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+        <span class="c1"># Set any gaps in kwargs with the existing class values</span>
+        <span class="c1"># (not subclasses) so as not to override them with the defaults</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">Color</span><span class="o">.</span><span class="n">__keys</span> <span class="ow">and</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+                <span class="n">kwargs</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">kwargs</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">__resolve_arg_type</span><span class="p">(</span><span class="n">arg</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+        <span class="c1"># if codes are entered all together e.g.</span>
+        <span class="c1"># &gt;&gt;&gt; color = Color(112)</span>
+        <span class="c1"># {&quot;text&quot;: &quot;red&quot;, &quot;effect&quot;: &quot;bold&quot;, &quot;background&quot;: &quot;green&quot;}</span>
+        <span class="c1"># then separate them to be used as individual arguments</span>
+        <span class="c1"># otherwise return as is</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">arg</span><span class="p">)):</span>
+                <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">arg</span>
+
+    <span class="k">def</span> <span class="nf">__process_args</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">args</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="c1"># e.g. instead of text=&quot;red&quot;, effect=&quot;bold&quot;, background=&quot;blue&quot;</span>
+        <span class="c1"># 114 would get the same result</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">count</span><span class="p">,</span> <span class="n">arg</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
+            <span class="n">args</span><span class="p">[</span><span class="n">count</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__resolve_arg_type</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">args</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">__kwargs_in_range</span><span class="p">(</span>
+            <span class="n">index_</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">args</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Any</span><span class="p">],</span> <span class="n">kwargs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+        <span class="c1"># the index is good to use if the value is not None and is less</span>
+        <span class="c1"># than the length of the arguments given</span>
+        <span class="k">if</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">index_</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
+            <span class="n">kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">key</span><span class="p">:</span> <span class="n">args</span><span class="p">[</span><span class="n">index_</span><span class="p">]})</span>
+        <span class="k">return</span> <span class="n">kwargs</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">__keywords_not_ready</span><span class="p">(</span>
+            <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">opts</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="c1"># determine whether keyword arguments provided aren&#39;t valid</span>
+        <span class="c1"># check whether the args given are not integers or are not</span>
+        <span class="c1"># within the length of opts that can be used</span>
+        <span class="c1"># return positive value if kwargs will need to be resolved</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="k">return</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">or</span> <span class="n">kwargs</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">opts</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">True</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">__resolve_alternate_opts</span><span class="p">(</span>
+            <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+            <span class="n">kwargs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]],</span>
+            <span class="n">opts</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+            <span class="n">default</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]:</span>
+        <span class="c1"># will assign the default value to kwargs if invalid value is</span>
+        <span class="c1"># provided otherwise if keypair is string - but valid - value</span>
+        <span class="c1"># will be converted to integer</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span> <span class="ow">or</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">kwargs</span> <span class="ow">and</span> <span class="n">kwargs</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">opts</span><span class="p">:</span>
+            <span class="n">kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">key</span><span class="p">:</span> <span class="n">default</span><span class="p">})</span>
+        <span class="k">elif</span> <span class="n">kwargs</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="ow">in</span> <span class="n">opts</span><span class="p">:</span>
+            <span class="n">kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">key</span><span class="p">:</span> <span class="n">opts</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="n">key</span><span class="p">])})</span>
+        <span class="k">return</span> <span class="n">kwargs</span>
+
+    <span class="k">def</span> <span class="nf">__resolve_kwargs</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+        <span class="c1"># if kwargs are not able to be used as they are then run methods</span>
+        <span class="c1"># which convert kwargs from alternative values to integer codes</span>
+        <span class="n">default</span> <span class="o">=</span> <span class="mi">7</span> <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;text&quot;</span> <span class="k">else</span> <span class="mi">0</span>
+        <span class="n">opts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__get_opts</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__keywords_not_ready</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">,</span> <span class="n">opts</span><span class="p">):</span>
+            <span class="n">kwargs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__resolve_alternate_opts</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">,</span> <span class="n">opts</span><span class="p">,</span> <span class="n">default</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">kwargs</span>
+
+    <span class="k">def</span> <span class="nf">__get_processed</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">args</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Any</span><span class="p">],</span> <span class="n">kwargs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+        <span class="c1"># organise args and kwargs into a parsable dictionary</span>
+        <span class="c1"># ensure values given are withing the range of values that can</span>
+        <span class="c1"># be used and if they aren&#39;t instantiate with default values</span>
+        <span class="c1"># check whether keywords are good to go or need to be resolved</span>
+        <span class="c1"># first</span>
+        <span class="k">for</span> <span class="n">index_</span><span class="p">,</span> <span class="n">key</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">Color</span><span class="o">.</span><span class="n">__keys</span><span class="p">):</span>
+            <span class="n">kwargs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__kwargs_in_range</span><span class="p">(</span><span class="n">index_</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
+            <span class="n">kwargs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__resolve_kwargs</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">kwargs</span>
+
+    <span class="k">def</span> <span class="nf">__set_subclass</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">args</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># set subclass as an instance attribute so dynamic names are</span>
+        <span class="c1"># recognised as correct attributes belonging to class</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__get_processed</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+        <span class="n">color</span> <span class="o">=</span> <span class="n">Color</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">value</span><span class="p">)</span>
+        <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">color</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__make_subclass</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">args</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="c1"># make subclass attribute and return boolean value so method</span>
+        <span class="c1"># calling this method can determine whether subclass has</span>
+        <span class="c1"># successfully been made</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__set_subclass</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span>
+                <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="k">def</span> <span class="nf">__set_class_attrs</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="n">args</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">tuple</span><span class="p">,</span> <span class="nb">list</span><span class="p">],</span>
+            <span class="n">kwargs</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]],</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># if not making a subclass then process args and kwargs and add</span>
+        <span class="c1"># compiled dict to masterclass</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__make_subclass</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">):</span>
+            <span class="n">params</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__get_processed</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__set_bold_attr</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># Instantiate bold class object if bold is not set for more</span>
+        <span class="c1"># flexible usage and less setting up when using this module to</span>
+        <span class="c1"># manipulate particular colored strings</span>
+        <span class="n">bold</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;bold&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">],</span>
+                <span class="s2">&quot;effect&quot;</span><span class="p">:</span> <span class="s2">&quot;bold&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;background&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">[</span><span class="s2">&quot;background&quot;</span><span class="p">],</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__make_subclass</span><span class="p">((),</span> <span class="n">bold</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__bold_switch</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># bold switch:</span>
+        <span class="c1"># - if used in a class instantiated as bold, switch bold off</span>
+        <span class="c1"># - if used in a class instantiated without bold, switch bold on</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">effect</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__set_bold_attr</span><span class="p">()</span>
+
+<div class="viewcode-block" id="Color.set"><a class="viewcode-back" href="../object_colors.html#object_colors.Color.set">[docs]</a>    <span class="k">def</span> <span class="nf">set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Call to set new instance values</span>
+
+<span class="sd">        colors:</span>
+<span class="sd">          - black:        0</span>
+<span class="sd">          - red:          1</span>
+<span class="sd">          - green:        2</span>
+<span class="sd">          - yellow:       3</span>
+<span class="sd">          - blue:         4</span>
+<span class="sd">          - purple:       5</span>
+<span class="sd">          - cyan:         6</span>
+<span class="sd">          - white:        7</span>
+
+<span class="sd">        effects:</span>
+<span class="sd">          - None:         0</span>
+<span class="sd">          - bold:         1</span>
+<span class="sd">          - bright:       2</span>
+<span class="sd">          - underline:    3</span>
+<span class="sd">          - negative:     4</span>
+
+<span class="sd">        :param args:    Colors or effects as integers or strings</span>
+
+<span class="sd">                        Without keywords args are positional like so:</span>
+
+<span class="sd">                        &gt;&gt;&gt; color = Color(&quot;text&quot;, &quot;effect&quot;, &quot;background&quot;)</span>
+
+<span class="sd">                        &gt;&gt;&gt; color.set(2, 1, 1)</span>
+<span class="sd">                        &gt;&gt;&gt; print(color.__dict__)  # doctest +ELLIPSIS</span>
+<span class="sd">                        {&#39;text&#39;: 2, &#39;effect&#39;: 1, &#39;background&#39;: 1, &#39;b...}</span>
+
+<span class="sd">                          - text:       green</span>
+<span class="sd">                          - effect:     bold</span>
+<span class="sd">                          - background: red</span>
+
+<span class="sd">        :param kwargs:  More precise keyword arguments</span>
+
+<span class="sd">                        &gt;&gt;&gt; color = Color()</span>
+
+<span class="sd">                        &gt;&gt;&gt; # instance attributes</span>
+<span class="sd">                        &gt;&gt;&gt; color.set(</span>
+<span class="sd">                        ...     text=&quot;green&quot;,</span>
+<span class="sd">                        ...     effect=&quot;bold&quot;,</span>
+<span class="sd">                        ...     background=&quot;red&quot;</span>
+<span class="sd">                        ... )</span>
+<span class="sd">                        &gt;&gt;&gt; print(color.__dict__)  # doctest +ELLIPSIS</span>
+<span class="sd">                        {&#39;text&#39;: 2, &#39;effect&#39;: 1, &#39;background&#39;: 1, &#39;b...}</span>
+
+<span class="sd">                        &gt;&gt;&gt; # subclasses -  set like those for</span>
+<span class="sd">                        &gt;&gt;&gt; # original class only keyword arguments</span>
+<span class="sd">                        &gt;&gt;&gt; # are expressed as dictionary</span>
+<span class="sd">                        &gt;&gt;&gt; color.set(</span>
+<span class="sd">                        ...     sub_color={</span>
+<span class="sd">                        ...         &quot;text&quot;: &quot;green&quot;,</span>
+<span class="sd">                        ...         &quot;effect&quot;: &quot;bold&quot;,</span>
+<span class="sd">                        ...         &quot;background&quot;: &quot;red&quot;</span>
+<span class="sd">                        ...     }</span>
+<span class="sd">                        ... )</span>
+<span class="sd">                        &gt;&gt;&gt; print(color.sub_color.__dict__)</span>
+<span class="sd">                        {&#39;text&#39;: 2, &#39;effect&#39;: 1, &#39;background&#39;: 1}</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">kwargs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__populate_defaults</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__process_args</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__set_class_attrs</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__bold_switch</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Color.populate_colors"><a class="viewcode-back" href="../object_colors.html#object_colors.Color.populate_colors">[docs]</a>    <span class="k">def</span> <span class="nf">populate_colors</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;This will create a subclass for every available color</span>
+
+<span class="sd">        &gt;&gt;&gt; color = Color()</span>
+<span class="sd">        &gt;&gt;&gt; color.populate_colors()</span>
+<span class="sd">        &gt;&gt;&gt; print(color.__dict__)  # doctest +ELLIPSIS</span>
+<span class="sd">        {&#39;text&#39;: 7, &#39;effect&#39;: 0, &#39;background&#39;: 0, &#39;bold&#39;: &lt;object_co...}</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">color</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__get_opts</span><span class="p">(</span><span class="s2">&quot;colors&quot;</span><span class="p">):</span>
+            <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="n">color</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="n">color</span><span class="p">}}</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__make_subclass</span><span class="p">((),</span> <span class="n">kwargs</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Color.get"><a class="viewcode-back" href="../object_colors.html#object_colors.Color.get">[docs]</a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="n">reset</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">reset</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="o">...</span><span class="p">]]:</span>
+        <span class="sd">&quot;&quot;&quot;Return colored string</span>
+
+<span class="sd">        &gt;&gt;&gt; color = Color(</span>
+<span class="sd">        ...     text=&quot;red&quot;, effect=&quot;bold&quot;, background=&quot;green&quot;</span>
+<span class="sd">        ... )</span>
+<span class="sd">        &gt;&gt;&gt; str_ = color.get(&quot;red, bold, green background&quot;)</span>
+<span class="sd">        &gt;&gt;&gt; print(str_)</span>
+<span class="sd">        \u001b[1;31;42mred, bold, green background\u001b[0;0m</span>
+
+<span class="sd">        :param args:    Manipulate string(s)</span>
+<span class="sd">        :param reset:   Variable reset code i.e. standard reset to white</span>
+<span class="sd">                        text, previous set color, or nothing</span>
+<span class="sd">        :return:        Colored string</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__get_colored_tuple</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">reset</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__get_colored_str</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">reset</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Color.get_key"><a class="viewcode-back" href="../object_colors.html#object_colors.Color.get_key">[docs]</a>    <span class="k">def</span> <span class="nf">get_key</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="n">str_</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+            <span class="o">*</span><span class="n">search</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+            <span class="n">scatter</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+            <span class="n">ignore_case</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;With the string as the first argument - and one or more</span>
+<span class="sd">        searches following - add color to corresponding matched keys</span>
+
+<span class="sd">        &gt;&gt;&gt; color = Color(text=&quot;red&quot;)</span>
+
+<span class="sd">        &gt;&gt;&gt; str_ = color.get_key(&quot;str to color&quot;, &quot;str&quot;)</span>
+<span class="sd">        &gt;&gt;&gt; print(str_)</span>
+<span class="sd">        \u001b[0;31;40mstr\u001b[0;0m to color</span>
+
+<span class="sd">        (Ansi escaped strings may be entered)</span>
+
+<span class="sd">        &gt;&gt;&gt; str_ = &quot;\u001b[0;32;40mstr to color\u001b[0;0m&quot;</span>
+<span class="sd">        &gt;&gt;&gt; str_ = color.get_key(str_, &quot;str&quot;)</span>
+<span class="sd">        &gt;&gt;&gt; print(str_)  # doctest +ELLIPSIS</span>
+<span class="sd">        \u001b[0;32;40m\u001b[0;31;40mstr\u001b[0;32;40m to color...</span>
+
+<span class="sd">        :param str_:        String containing the key(s) to color</span>
+<span class="sd">        :param search:      Key(s) within string to color</span>
+<span class="sd">        :param scatter:     Color key(s) in any assortment</span>
+<span class="sd">        :param ignore_case: Ignore upper and lower cases</span>
+<span class="sd">        :return:            String with selected key(s) colored</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">switches</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;any&quot;</span><span class="p">:</span> <span class="n">scatter</span><span class="p">,</span> <span class="s2">&quot;case&quot;</span><span class="p">:</span> <span class="n">ignore_case</span><span class="p">}</span>
+        <span class="k">if</span> <span class="n">Color</span><span class="o">.</span><span class="n">code</span> <span class="ow">in</span> <span class="n">str_</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__resolve_ansi_code</span><span class="p">(</span><span class="n">search</span><span class="p">,</span> <span class="n">str_</span><span class="p">,</span> <span class="n">switches</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__process_str</span><span class="p">(</span><span class="n">search</span><span class="p">,</span> <span class="n">str_</span><span class="p">,</span> <span class="n">Color</span><span class="o">.</span><span class="n">reset</span><span class="p">,</span> <span class="n">switches</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Color.multicolor"><a class="viewcode-back" href="../object_colors.html#object_colors.Color.multicolor">[docs]</a>    <span class="k">def</span> <span class="nf">multicolor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">str_</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Return string colored with an assortment of all colors</span>
+<span class="sd">        instantiated in subclass instances</span>
+
+<span class="sd">        &gt;&gt;&gt; # only white will be used</span>
+<span class="sd">        &gt;&gt;&gt; color = Color(text=&quot;green&quot;)</span>
+<span class="sd">        &gt;&gt;&gt; none = color.multicolor(&quot;multicolored string&quot;)</span>
+<span class="sd">        &gt;&gt;&gt; print(none)</span>
+<span class="sd">        multicolored string</span>
+
+<span class="sd">        &gt;&gt;&gt; # only green and white will be used</span>
+<span class="sd">        &gt;&gt;&gt; color.set(green={&quot;text&quot;: &quot;green&quot;})</span>
+<span class="sd">        &gt;&gt;&gt; green_and_none = color.multicolor(&quot;multicolored string&quot;)</span>
+<span class="sd">        &gt;&gt;&gt; assert &quot;0;32;40m&quot; in green_and_none</span>
+
+<span class="sd">        &gt;&gt;&gt; # only green, red and white will be used</span>
+<span class="sd">        &gt;&gt;&gt; codes = [&quot;0;31;40m&quot;, &quot;0;32;40m&quot;]</span>
+<span class="sd">        &gt;&gt;&gt; color.set(red={&quot;text&quot;: &quot;red&quot;})</span>
+<span class="sd">        &gt;&gt;&gt; green_red_none = color.multicolor(&quot;multicolored string&quot;)</span>
+<span class="sd">        &gt;&gt;&gt; for code in codes:</span>
+<span class="sd">        ...     assert code in green_red_none</span>
+
+<span class="sd">        &gt;&gt;&gt; # all colors will be used</span>
+<span class="sd">        &gt;&gt;&gt; codes = [</span>
+<span class="sd">        ...     &quot;0;31;40m&quot;,</span>
+<span class="sd">        ...     &quot;0;32;40m&quot;,</span>
+<span class="sd">        ...     &quot;0;33;40m&quot;</span>
+<span class="sd">        ...     &quot;0;34;40m&quot;,</span>
+<span class="sd">        ...     &quot;0;35;40m&quot;,</span>
+<span class="sd">        ...     &quot;0;36;40m&quot;,</span>
+<span class="sd">        ...     &quot;0;37;40m&quot;</span>
+<span class="sd">        ... ]</span>
+<span class="sd">        &gt;&gt;&gt; populate = Color()</span>
+<span class="sd">        &gt;&gt;&gt; populate.populate_colors()</span>
+<span class="sd">        &gt;&gt;&gt; all_colors = populate.multicolor(&quot;multicolored string&quot;)</span>
+
+
+<span class="sd">        :param str_:    String to color</span>
+<span class="sd">        :return:        Colored string</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">colors</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__get_multi_object</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__get_multi_str</span><span class="p">(</span><span class="n">str_</span><span class="p">,</span> <span class="n">colors</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Color.set_str"><a class="viewcode-back" href="../object_colors.html#object_colors.Color.set_str">[docs]</a>    <span class="k">def</span> <span class="nf">set_str</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">str_</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">name_</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;helper&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Separate ansi code from string, creating a Color subclass</span>
+<span class="sd">        from the pre-existing color, available in self, and return the</span>
+<span class="sd">        bare string</span>
+
+<span class="sd">        :param str_:    String containing ansi escape codes to</span>
+<span class="sd">                        instantiate class from its codes</span>
+<span class="sd">        :param name_:   Name of subclass</span>
+<span class="sd">        :return:        String stripped of ansi codes</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_object</span><span class="p">(</span><span class="n">str_</span><span class="p">,</span> <span class="n">name_</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">state</span><span class="p">[</span><span class="s2">&quot;str_&quot;</span><span class="p">]:</span>
+            <span class="n">str_</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;str_&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__make_subclass</span><span class="p">((),</span> <span class="n">state</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">str_</span></div>
+
+<div class="viewcode-block" id="Color.pop"><a class="viewcode-back" href="../object_colors.html#object_colors.Color.pop">[docs]</a>    <span class="k">def</span> <span class="nf">pop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">str_</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Any</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Retrieve attr present with class instance</span>
+
+<span class="sd">        &gt;&gt;&gt; color = Color(subclass={&quot;text&quot;: &quot;red&quot;})</span>
+<span class="sd">        &gt;&gt;&gt; red = color.pop(&quot;subclass&quot;)</span>
+<span class="sd">        &gt;&gt;&gt; print(red.__dict__)  # doctest +ELLIPSIS</span>
+<span class="sd">        {&#39;text&#39;: 1, &#39;effect&#39;: 0, &#39;background&#39;: 0, &#39;bold&#39;: &lt;objec...}</span>
+
+<span class="sd">        :param str_:    Key to remove</span>
+<span class="sd">        :return:        Class dict or None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">str_</span> <span class="o">==</span> <span class="n">key</span> <span class="ow">and</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">Color</span><span class="o">.</span><span class="n">__keys</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="Color.get_object"><a class="viewcode-back" href="../object_colors.html#object_colors.Color.get_object">[docs]</a>    <span class="k">def</span> <span class="nf">get_object</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">str_</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">name_</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;helper&quot;</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]]:</span>
+        <span class="sd">&quot;&quot;&quot;Split ansi codes and string and populate the object</span>
+<span class="sd">        representing the string and its color before they were</span>
+<span class="sd">        separated to restore its state later</span>
+
+<span class="sd">        .. todo::</span>
+<span class="sd">            - Make this work for multicolor which consists of more than</span>
+<span class="sd">              just one code</span>
+<span class="sd">            - Currently the only code captured will be the first one</span>
+<span class="sd">            - This will also include changes to self.get_key() which</span>
+<span class="sd">              will need to iterate through several items in object and</span>
+<span class="sd">              put them back in the right place</span>
+
+<span class="sd">        :param str_:    String containing ansi escape codes</span>
+<span class="sd">        :param name_:   Name of the subclass to be created</span>
+<span class="sd">        :return:        Dictionary containing separated escape codes and</span>
+<span class="sd">                        str</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">words</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_list</span><span class="p">(</span><span class="n">str_</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__get_state_object</span><span class="p">(</span><span class="n">words</span><span class="p">,</span> <span class="n">name_</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Color.get_list"><a class="viewcode-back" href="../object_colors.html#object_colors.Color.get_list">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_list</span><span class="p">(</span><span class="n">str_</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Split string up by ansi escape codes and return list of all</span>
+<span class="sd">        sections of the string</span>
+
+<span class="sd">        :param str_:    String containing ansi escape codes</span>
+<span class="sd">        :return:        List of ordered escape codes and substrings</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">words</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">Color</span><span class="o">.</span><span class="n">ansi_escape</span><span class="p">,</span> <span class="n">str_</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">word</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">words</span> <span class="k">if</span> <span class="n">word</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="Color.print"><a class="viewcode-back" href="../object_colors.html#object_colors.Color.print">[docs]</a>    <span class="k">def</span> <span class="nf">print</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span>
+            <span class="n">multi</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Print colored strings straight to stdout</span>
+<span class="sd">        builtin print() kwargs valid keyword arguments</span>
+
+<span class="sd">        &gt;&gt;&gt; color = Color(&quot;red&quot;, &quot;bold&quot;, &quot;green&quot;)</span>
+<span class="sd">        &gt;&gt;&gt; color.print(&quot;red, bold, green background&quot;)</span>
+<span class="sd">        \u001b[1;31;42mred, bold, green background\u001b[0;0m</span>
+
+<span class="sd">        :param args:    Arbitrary number of strings or integers</span>
+<span class="sd">        :param multi:   Boolean value to return multicolored string</span>
+<span class="sd">        :param kwargs:  builtin print() kwargs</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">multi</span><span class="p">:</span>
+            <span class="n">str_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">multicolor</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">str_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">str_</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Color.print_key"><a class="viewcode-back" href="../object_colors.html#object_colors.Color.print_key">[docs]</a>    <span class="k">def</span> <span class="nf">print_key</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="n">str_</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+            <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+            <span class="n">scatter</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+            <span class="n">ignore_case</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Search for and then color key-words</span>
+
+<span class="sd">        &gt;&gt;&gt; color = Color(1)</span>
+<span class="sd">        &gt;&gt;&gt; color.print_key(&quot;str to color&quot;, &quot;str&quot;)</span>
+<span class="sd">        \u001b[0;31;40mstr\u001b[0;0m to color</span>
+
+<span class="sd">        :param str_:        String to be printed</span>
+<span class="sd">        :param args:        Words to be colored</span>
+<span class="sd">        :param ignore_case: Ignore case if True</span>
+<span class="sd">        :param scatter:     Search letters and not just words if True</span>
+<span class="sd">        :param kwargs:      builtin print() kwargs</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">str_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_key</span><span class="p">(</span>
+            <span class="n">str_</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">scatter</span><span class="o">=</span><span class="n">scatter</span><span class="p">,</span> <span class="n">ignore_case</span><span class="o">=</span><span class="n">ignore_case</span>
+        <span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">str_</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/oc.png" alt="Logo"/>
+            </a></p>
+<h3><a href="../index.html">Table of Contents</a></h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../object_colors.html">object-colors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_include.html">README</a></li>
+</ul>
+
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Object Colors 1.0.8 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Stephen Whitlock.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.4.
+    </div>
+  </body>
+</html>

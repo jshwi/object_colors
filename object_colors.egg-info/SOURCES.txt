@@ -1,0 +1,8 @@
+README.rst
+object_colors.py
+setup.py
+object_colors.egg-info/PKG-INFO
+object_colors.egg-info/SOURCES.txt
+object_colors.egg-info/dependency_links.txt
+object_colors.egg-info/top_level.txt
+object_colors.egg-info/zip-safe

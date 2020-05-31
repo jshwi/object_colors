@@ -1,0 +1,568 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>object-colors &#8212; Object Colors 1.0.8 documentation</title>
+    <link rel="stylesheet" href="_static/graphite.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="README" href="readme_include.html" />
+    <link rel="prev" title="Object Color’s Docs" href="index.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="readme_include.html" title="README"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Object Color’s Docs"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Object Colors 1.0.8 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-object_colors">
+<span id="object-colors"></span><h1>object-colors<a class="headerlink" href="#module-object_colors" title="Permalink to this headline">¶</a></h1>
+<p>object-colors
+The Python Color Dictionary</p>
+<p>A simple to use class module designed to stylise output with minimal
+setup and instantiation</p>
+<dl class="py class">
+<dt id="object_colors.Color">
+<em class="property">class </em><code class="sig-prename descclassname">object_colors.</code><code class="sig-name descname">Color</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>str<span class="p">, </span>int<span class="p">]</span></span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/object_colors.html#Color"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#object_colors.Color" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Instantiate object with attributes to use…</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">object_colors</span> <span class="kn">import</span> <span class="n">Color</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">str_</span> <span class="o">=</span> <span class="s2">&quot;Sample string&quot;</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">color</span> <span class="o">=</span> <span class="n">Color</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s2">&quot;green&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">color_str</span> <span class="o">=</span> <span class="n">color</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">str_</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">color_str</span><span class="p">)</span>
+<span class="go">[0;32;40mSample string[0;0m</span>
+</pre></div>
+</div>
+<p>…or set attributes after instantiation</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">color</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">subclass</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;red&quot;</span><span class="p">})</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">substr</span> <span class="o">=</span> <span class="n">color</span><span class="o">.</span><span class="n">subclass</span><span class="o">.</span><span class="n">get_key</span><span class="p">(</span><span class="n">str_</span><span class="p">,</span> <span class="s2">&quot;Sample&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">substr</span><span class="p">)</span>
+<span class="go">[0;31;40mSample[0;0m string</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">green_substr</span> <span class="o">=</span> <span class="n">color</span><span class="o">.</span><span class="n">subclass</span><span class="o">.</span><span class="n">get_key</span><span class="p">(</span><span class="n">color_str</span><span class="p">,</span> <span class="s2">&quot;Sample&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">green_substr</span><span class="p">)</span>  <span class="c1"># doctest +ELLIPSIS</span>
+<span class="go">[0;32;40m[0;31;40mSample[0;32;40m string[...</span>
+</pre></div>
+</div>
+<p>Pop objects from <cite>color.__dict__</cite></p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">subclass</span> <span class="o">=</span> <span class="n">color</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;subclass&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">substr</span> <span class="o">=</span> <span class="n">subclass</span><span class="o">.</span><span class="n">get_key</span><span class="p">(</span><span class="n">str_</span><span class="p">,</span> <span class="s2">&quot;Sample&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">substr</span><span class="p">)</span>
+<span class="go">[0;31;40mSample[0;0m string</span>
+</pre></div>
+</div>
+<p>Print colored strings directly</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">color</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="n">str_</span><span class="p">)</span>
+<span class="go">[0;32;40mSample string[0;0m</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">color</span><span class="o">.</span><span class="n">print_key</span><span class="p">(</span><span class="n">str_</span><span class="p">,</span> <span class="s2">&quot;string&quot;</span><span class="p">)</span>
+<span class="go">Sample [0;32;40mstring[0;0m</span>
+</pre></div>
+</div>
+<p>Set attributes in instance with flexible arguments</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># keywords</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">color</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s2">&quot;blue&quot;</span><span class="p">,</span> <span class="n">effect</span><span class="o">=</span><span class="s2">&quot;bold&quot;</span><span class="p">,</span> <span class="n">background</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">color</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">)</span>  <span class="c1"># doctest +ELLIPSIS</span>
+<span class="go">{&#39;text&#39;: 4, &#39;effect&#39;: 1, &#39;background&#39;: 1, &#39;bold&#39;: &lt;object_colors...}</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># args (string)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">color</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;blue&quot;</span><span class="p">,</span> <span class="s2">&quot;bold&quot;</span><span class="p">,</span> <span class="s2">&quot;red&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">color</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">)</span>  <span class="c1"># doctest +ELLIPSIS</span>
+<span class="go">{&#39;text&#39;: 4, &#39;effect&#39;: 1, &#39;background&#39;: 1, &#39;bold&#39;: &lt;object_colors...}</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># args (tuple)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">color</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">color</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">)</span>  <span class="c1"># doctest +ELLIPSIS</span>
+<span class="go">{&#39;text&#39;: 4, &#39;effect&#39;: 1, &#39;background&#39;: 1, &#39;bold&#39;: &lt;object_colors...}</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># args (integer)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">color</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="mi">411</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">color</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">)</span>  <span class="c1"># doctest +ELLIPSIS</span>
+<span class="go">{&#39;text&#39;: 4, &#39;effect&#39;: 1, &#39;background&#39;: 1, &#39;bold&#39;: &lt;object_colors...}</span>
+</pre></div>
+</div>
+<p>Set attributes in object instance’s subclasses</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">color</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">red</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="s2">&quot;effect&quot;</span><span class="p">:</span> <span class="s2">&quot;bold&quot;</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">color</span><span class="o">.</span><span class="n">red</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="s2">&quot;Red string&quot;</span><span class="p">)</span>
+<span class="go">[1;31;40mRed string[0;0m</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">color</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">blue</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;blue&quot;</span><span class="p">,</span> <span class="s2">&quot;effect&quot;</span><span class="p">:</span> <span class="s2">&quot;bold&quot;</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">color</span><span class="o">.</span><span class="n">blue</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="s2">&quot;Blue string&quot;</span><span class="p">)</span>
+<span class="go">[1;34;40mBlue string[0;0m</span>
+</pre></div>
+</div>
+<p>Populate instance with subclasses for all colors</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">color</span><span class="o">.</span><span class="n">populate_colors</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">color</span><span class="o">.</span><span class="n">green</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="s2">&quot;Green string&quot;</span><span class="p">)</span>
+<span class="go">[0;32;40mGreen string[0;0m</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">color</span><span class="o">.</span><span class="n">cyan</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="s2">&quot;Cyan string&quot;</span><span class="p">)</span>
+<span class="go">[0;36;40mCyan string[0;0m</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># etc...</span>
+</pre></div>
+</div>
+<p>Easily switch between bold text</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">color</span><span class="o">.</span><span class="n">purple</span><span class="o">.</span><span class="n">bold</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="s2">&quot;Bold purple string&quot;</span><span class="p">)</span>
+<span class="go">[1;35;40mBold purple string[0;0m</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Variables</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference internal" href="#object_colors.Color.code" title="object_colors.Color.code"><strong>code</strong></a> – Ansi escape code</p></li>
+<li><p><a class="reference internal" href="#object_colors.Color.reset" title="object_colors.Color.reset"><strong>reset</strong></a> – Default reset code to switch off color for str</p></li>
+<li><p><a class="reference internal" href="#object_colors.Color.ansi_escape" title="object_colors.Color.ansi_escape"><strong>ansi_escape</strong></a> – Regex for finding ansi escape codes in strings</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt id="object_colors.Color.code">
+<code class="sig-name descname">code</code><em class="property"> = '\x1b'</em><a class="headerlink" href="#object_colors.Color.code" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="object_colors.Color.reset">
+<code class="sig-name descname">reset</code><em class="property"> = '\x1b[0;0m'</em><a class="headerlink" href="#object_colors.Color.reset" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="object_colors.Color.ansi_escape">
+<code class="sig-name descname">ansi_escape</code><em class="property"> = re.compile('(\\x1B(?:[&#64;-Z\\\\-_]|\\[[0-?]*[ -/]*[&#64;-~]))')</em><a class="headerlink" href="#object_colors.Color.ansi_escape" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="object_colors.Color.set">
+<code class="sig-name descname">set</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span></em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="_modules/object_colors.html#Color.set"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#object_colors.Color.set" title="Permalink to this definition">¶</a></dt>
+<dd><p>Call to set new instance values</p>
+<dl class="simple">
+<dt>colors:</dt><dd><ul class="simple">
+<li><p>black:        0</p></li>
+<li><p>red:          1</p></li>
+<li><p>green:        2</p></li>
+<li><p>yellow:       3</p></li>
+<li><p>blue:         4</p></li>
+<li><p>purple:       5</p></li>
+<li><p>cyan:         6</p></li>
+<li><p>white:        7</p></li>
+</ul>
+</dd>
+<dt>effects:</dt><dd><ul class="simple">
+<li><p>None:         0</p></li>
+<li><p>bold:         1</p></li>
+<li><p>bright:       2</p></li>
+<li><p>underline:    3</p></li>
+<li><p>negative:     4</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>args</strong> – <p>Colors or effects as integers or strings</p>
+<p>Without keywords args are positional like so:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">color</span> <span class="o">=</span> <span class="n">Color</span><span class="p">(</span><span class="s2">&quot;text&quot;</span><span class="p">,</span> <span class="s2">&quot;effect&quot;</span><span class="p">,</span> <span class="s2">&quot;background&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">color</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">color</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">)</span>  <span class="c1"># doctest +ELLIPSIS</span>
+<span class="go">{&#39;text&#39;: 2, &#39;effect&#39;: 1, &#39;background&#39;: 1, &#39;b...}</span>
+</pre></div>
+</div>
+<blockquote>
+<div><ul>
+<li><p>text:       green</p></li>
+<li><p>effect:     bold</p></li>
+<li><p>background: red</p></li>
+</ul>
+</div></blockquote>
+</p></li>
+<li><p><strong>kwargs</strong> – <p>More precise keyword arguments</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">color</span> <span class="o">=</span> <span class="n">Color</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># instance attributes</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">color</span><span class="o">.</span><span class="n">set</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">text</span><span class="o">=</span><span class="s2">&quot;green&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">effect</span><span class="o">=</span><span class="s2">&quot;bold&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">background</span><span class="o">=</span><span class="s2">&quot;red&quot;</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">color</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">)</span>  <span class="c1"># doctest +ELLIPSIS</span>
+<span class="go">{&#39;text&#39;: 2, &#39;effect&#39;: 1, &#39;background&#39;: 1, &#39;b...}</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># subclasses -  set like those for</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># original class only keyword arguments</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># are expressed as dictionary</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">color</span><span class="o">.</span><span class="n">set</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">sub_color</span><span class="o">=</span><span class="p">{</span>
+<span class="gp">... </span>        <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;green&quot;</span><span class="p">,</span>
+<span class="gp">... </span>        <span class="s2">&quot;effect&quot;</span><span class="p">:</span> <span class="s2">&quot;bold&quot;</span><span class="p">,</span>
+<span class="gp">... </span>        <span class="s2">&quot;background&quot;</span><span class="p">:</span> <span class="s2">&quot;red&quot;</span>
+<span class="gp">... </span>    <span class="p">}</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">color</span><span class="o">.</span><span class="n">sub_color</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">)</span>
+<span class="go">{&#39;text&#39;: 2, &#39;effect&#39;: 1, &#39;background&#39;: 1}</span>
+</pre></div>
+</div>
+</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="object_colors.Color.populate_colors">
+<code class="sig-name descname">populate_colors</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="_modules/object_colors.html#Color.populate_colors"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#object_colors.Color.populate_colors" title="Permalink to this definition">¶</a></dt>
+<dd><p>This will create a subclass for every available color</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">color</span> <span class="o">=</span> <span class="n">Color</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">color</span><span class="o">.</span><span class="n">populate_colors</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">color</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">)</span>  <span class="c1"># doctest +ELLIPSIS</span>
+<span class="go">{&#39;text&#39;: 7, &#39;effect&#39;: 0, &#39;background&#39;: 0, &#39;bold&#39;: &lt;object_co...}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="object_colors.Color.get">
+<code class="sig-name descname">get</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>str<span class="p">, </span>int<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">reset</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">'\x1b[0;0m'</span></em><span class="sig-paren">)</span> &#x2192; Union[str, Tuple[Union[str, Any], …]]<a class="reference internal" href="_modules/object_colors.html#Color.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#object_colors.Color.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return colored string</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">color</span> <span class="o">=</span> <span class="n">Color</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">text</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="n">effect</span><span class="o">=</span><span class="s2">&quot;bold&quot;</span><span class="p">,</span> <span class="n">background</span><span class="o">=</span><span class="s2">&quot;green&quot;</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">str_</span> <span class="o">=</span> <span class="n">color</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;red, bold, green background&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">str_</span><span class="p">)</span>
+<span class="go">[1;31;42mred, bold, green background[0;0m</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>args</strong> – Manipulate string(s)</p></li>
+<li><p><strong>reset</strong> – Variable reset code i.e. standard reset to white
+text, previous set color, or nothing</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Colored string</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="object_colors.Color.get_key">
+<code class="sig-name descname">get_key</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">str_</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="o">*</span><span class="n">search</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">scatter</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em>, <em class="sig-param"><span class="n">ignore_case</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="_modules/object_colors.html#Color.get_key"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#object_colors.Color.get_key" title="Permalink to this definition">¶</a></dt>
+<dd><p>With the string as the first argument - and one or more
+searches following - add color to corresponding matched keys</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">color</span> <span class="o">=</span> <span class="n">Color</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">str_</span> <span class="o">=</span> <span class="n">color</span><span class="o">.</span><span class="n">get_key</span><span class="p">(</span><span class="s2">&quot;str to color&quot;</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">str_</span><span class="p">)</span>
+<span class="go">[0;31;40mstr[0;0m to color</span>
+</pre></div>
+</div>
+<p>(Ansi escaped strings may be entered)</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">str_</span> <span class="o">=</span> <span class="s2">&quot;[0;32;40mstr to color[0;0m&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">str_</span> <span class="o">=</span> <span class="n">color</span><span class="o">.</span><span class="n">get_key</span><span class="p">(</span><span class="n">str_</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">str_</span><span class="p">)</span>  <span class="c1"># doctest +ELLIPSIS</span>
+<span class="go">[0;32;40m[0;31;40mstr[0;32;40m to color...</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>str</strong> – String containing the key(s) to color</p></li>
+<li><p><strong>search</strong> – Key(s) within string to color</p></li>
+<li><p><strong>scatter</strong> – Color key(s) in any assortment</p></li>
+<li><p><strong>ignore_case</strong> – Ignore upper and lower cases</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>String with selected key(s) colored</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="object_colors.Color.multicolor">
+<code class="sig-name descname">multicolor</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">str_</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="_modules/object_colors.html#Color.multicolor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#object_colors.Color.multicolor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return string colored with an assortment of all colors
+instantiated in subclass instances</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># only white will be used</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">color</span> <span class="o">=</span> <span class="n">Color</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s2">&quot;green&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">none</span> <span class="o">=</span> <span class="n">color</span><span class="o">.</span><span class="n">multicolor</span><span class="p">(</span><span class="s2">&quot;multicolored string&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">none</span><span class="p">)</span>
+<span class="go">multicolored string</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># only green and white will be used</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">color</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">green</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;green&quot;</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">green_and_none</span> <span class="o">=</span> <span class="n">color</span><span class="o">.</span><span class="n">multicolor</span><span class="p">(</span><span class="s2">&quot;multicolored string&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="s2">&quot;0;32;40m&quot;</span> <span class="ow">in</span> <span class="n">green_and_none</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># only green, red and white will be used</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">codes</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;0;31;40m&quot;</span><span class="p">,</span> <span class="s2">&quot;0;32;40m&quot;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">color</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">red</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;red&quot;</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">green_red_none</span> <span class="o">=</span> <span class="n">color</span><span class="o">.</span><span class="n">multicolor</span><span class="p">(</span><span class="s2">&quot;multicolored string&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">code</span> <span class="ow">in</span> <span class="n">codes</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="k">assert</span> <span class="n">code</span> <span class="ow">in</span> <span class="n">green_red_none</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># all colors will be used</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">codes</span> <span class="o">=</span> <span class="p">[</span>
+<span class="gp">... </span>    <span class="s2">&quot;0;31;40m&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="s2">&quot;0;32;40m&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="s2">&quot;0;33;40m&quot;</span>
+<span class="gp">... </span>    <span class="s2">&quot;0;34;40m&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="s2">&quot;0;35;40m&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="s2">&quot;0;36;40m&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="s2">&quot;0;37;40m&quot;</span>
+<span class="gp">... </span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">populate</span> <span class="o">=</span> <span class="n">Color</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">populate</span><span class="o">.</span><span class="n">populate_colors</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">all_colors</span> <span class="o">=</span> <span class="n">populate</span><span class="o">.</span><span class="n">multicolor</span><span class="p">(</span><span class="s2">&quot;multicolored string&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>str</strong> – String to color</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Colored string</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="object_colors.Color.set_str">
+<code class="sig-name descname">set_str</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">str_</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">name_</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'helper'</span></em><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="_modules/object_colors.html#Color.set_str"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#object_colors.Color.set_str" title="Permalink to this definition">¶</a></dt>
+<dd><p>Separate ansi code from string, creating a Color subclass
+from the pre-existing color, available in self, and return the
+bare string</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>str</strong> – String containing ansi escape codes to
+instantiate class from its codes</p></li>
+<li><p><strong>name</strong> – Name of subclass</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>String stripped of ansi codes</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="object_colors.Color.pop">
+<code class="sig-name descname">pop</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">str_</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span> &#x2192; Optional<span class="p">[</span>Any<span class="p">]</span><a class="reference internal" href="_modules/object_colors.html#Color.pop"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#object_colors.Color.pop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve attr present with class instance</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">color</span> <span class="o">=</span> <span class="n">Color</span><span class="p">(</span><span class="n">subclass</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;red&quot;</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">red</span> <span class="o">=</span> <span class="n">color</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;subclass&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">red</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">)</span>  <span class="c1"># doctest +ELLIPSIS</span>
+<span class="go">{&#39;text&#39;: 1, &#39;effect&#39;: 0, &#39;background&#39;: 0, &#39;bold&#39;: &lt;objec...}</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>str</strong> – Key to remove</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Class dict or None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="object_colors.Color.get_object">
+<code class="sig-name descname">get_object</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">str_</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">name_</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'helper'</span></em><span class="sig-paren">)</span> &#x2192; Dict<span class="p">[</span>str<span class="p">, </span>Union<span class="p">[</span>str<span class="p">, </span>Dict<span class="p">[</span>str<span class="p">, </span>str<span class="p">]</span><span class="p">]</span><span class="p">]</span><a class="reference internal" href="_modules/object_colors.html#Color.get_object"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#object_colors.Color.get_object" title="Permalink to this definition">¶</a></dt>
+<dd><p>Split ansi codes and string and populate the object
+representing the string and its color before they were
+separated to restore its state later</p>
+<div class="admonition-todo admonition" id="id1">
+<p class="admonition-title">Todo</p>
+<ul class="simple">
+<li><p>Make this work for multicolor which consists of more than
+just one code</p></li>
+<li><p>Currently the only code captured will be the first one</p></li>
+<li><p>This will also include changes to self.get_key() which
+will need to iterate through several items in object and
+put them back in the right place</p></li>
+</ul>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>str</strong> – String containing ansi escape codes</p></li>
+<li><p><strong>name</strong> – Name of the subclass to be created</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Dictionary containing separated escape codes and
+str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="object_colors.Color.get_list">
+<em class="property">static </em><code class="sig-name descname">get_list</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">str_</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span>str<span class="p">]</span><a class="reference internal" href="_modules/object_colors.html#Color.get_list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#object_colors.Color.get_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>Split string up by ansi escape codes and return list of all
+sections of the string</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>str</strong> – String containing ansi escape codes</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>List of ordered escape codes and substrings</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="object_colors.Color.print">
+<code class="sig-name descname">print</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>str<span class="p">, </span>int<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">multi</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Dict<span class="p">[</span>str<span class="p">, </span>str<span class="p">]</span></span></em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="_modules/object_colors.html#Color.print"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#object_colors.Color.print" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print colored strings straight to stdout
+builtin print() kwargs valid keyword arguments</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">color</span> <span class="o">=</span> <span class="n">Color</span><span class="p">(</span><span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="s2">&quot;bold&quot;</span><span class="p">,</span> <span class="s2">&quot;green&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">color</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="s2">&quot;red, bold, green background&quot;</span><span class="p">)</span>
+<span class="go">[1;31;42mred, bold, green background[0;0m</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>args</strong> – Arbitrary number of strings or integers</p></li>
+<li><p><strong>multi</strong> – Boolean value to return multicolored string</p></li>
+<li><p><strong>kwargs</strong> – builtin print() kwargs</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="object_colors.Color.print_key">
+<code class="sig-name descname">print_key</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">str_</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">scatter</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em>, <em class="sig-param"><span class="n">ignore_case</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span></em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="_modules/object_colors.html#Color.print_key"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#object_colors.Color.print_key" title="Permalink to this definition">¶</a></dt>
+<dd><p>Search for and then color key-words</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">color</span> <span class="o">=</span> <span class="n">Color</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">color</span><span class="o">.</span><span class="n">print_key</span><span class="p">(</span><span class="s2">&quot;str to color&quot;</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">)</span>
+<span class="go">[0;31;40mstr[0;0m to color</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>str</strong> – String to be printed</p></li>
+<li><p><strong>args</strong> – Words to be colored</p></li>
+<li><p><strong>ignore_case</strong> – Ignore case if True</p></li>
+<li><p><strong>scatter</strong> – Search letters and not just words if True</p></li>
+<li><p><strong>kwargs</strong> – builtin print() kwargs</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/oc.png" alt="Logo"/>
+            </a></p>
+<h3><a href="index.html">Table of Contents</a></h3>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">object-colors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="readme_include.html">README</a></li>
+</ul>
+
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="readme_include.html" title="README"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Object Color’s Docs"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Object Colors 1.0.8 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Stephen Whitlock.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.4.
+    </div>
+  </body>
+</html>
